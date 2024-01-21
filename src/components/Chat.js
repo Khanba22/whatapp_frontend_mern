@@ -18,9 +18,6 @@ function Chat(props) {
     }
     const selectReply = (e) => {
         e.preventDefault()
-        console.log("E.target.value")
-        console.log()
-        console.log(props.data)
         const reply = { ...JSON.parse(e.target.id), show: true }
         dispatch({
             type: `${editReply}`,
@@ -40,7 +37,6 @@ function Chat(props) {
                 </div>
             </>}
             {/* Set The Div Box For Reactions and replies later */}
-
             {false ? <h4 style={{ color: data.color }} >{data.sender !== "you" ? data.sender : ""}</h4> : <></>}
             <p id={JSON.stringify(data)} onContextMenu={props.renderOptionTab}>{data.message}</p>
             <div className={styles.foot}>

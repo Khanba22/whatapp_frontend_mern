@@ -12,10 +12,16 @@
 }
 
 .optionContainer{
-    width: 100px;
-    background-color: #272727;
+    background-color: #272727f6;
+    backdrop-filter: blur(12px);
     position: absolute;
     z-index: 10;
+    padding: 5px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
 }
 
 .container{
@@ -74,23 +80,27 @@
 }
 
  .latestLocator{
+    color: var(--chatTertiary);
     position: absolute;
     border-radius: 100px;
     border: transparent;
-    background-color: var(--bgSecondary);
+    background-color: var(--chatBackground2secondary);
     height: 30px;
     width: 30px;
     left: 95%;
     top: 85%;
+    padding: 5px;
     -webkitBorder-radius: 100px;
     -moz-border-radius: 100px;
     -ms-border-radius: 100px;
     -o-border-radius: 100px;
 }
 
-.latestLocator a{
+.latestLocator img{
     height: 100%;
+    filter: invert(1);
     width: 100%;
+    -webkit-filter: invert(1);
 }
 
 #section1{
@@ -182,6 +192,7 @@
 }
 
 .replyDiv{
+    border-radius: 10px;
     background-color: var(--bgSecondary);
     z-index: 3;
     padding: 10px;

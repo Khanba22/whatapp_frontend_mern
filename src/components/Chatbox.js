@@ -3,6 +3,7 @@ import styles from "../stylesheets/Chatbox.module.css"
 import EmojiPicker from 'emoji-picker-react';
 import send from "../assets/send.png"
 import close from "../assets/close.png"
+import arrowDown from "../assets/arrowDoubleDown.png"
 // import { io } from 'socket.io-client';
 import Chat from './Chat';
 import { useDispatch, useSelector } from 'react-redux';
@@ -74,7 +75,11 @@ function Chatbox() {
     // socket.emit("send-message", data);
     setChats([...chats, data])
     setMessage("")
+    
     cancelReply()
+    setTimeout(() => {
+      document.getElementById('lowest').scrollIntoView()
+    }, 100);
   }
 
   useEffect(() => {
@@ -90,7 +95,6 @@ function Chatbox() {
     e.preventDefault()
     const heightBox = 230 // The height of Context Menu
     e.preventDefault()
-    console.log(e.target.id)
     const reply = { ...JSON.parse(e.target.id)}
     dispatch({
       type: `${editReply}`,
@@ -137,7 +141,9 @@ function Chatbox() {
             })
           }
           <button className={styles.latestLocator} onClick={() => {
-          }}>b</button>
+            document.getElementById('lowest').scrollIntoView()
+          }}> <img src={arrowDown} alt="" /> </button>
+          <div id='lowest'></div>
         </div>
         <div className={styles.inputBar}>
           {
@@ -153,7 +159,7 @@ function Chatbox() {
             </div>
           }
           <div className={styles.emojiSection}>
-            {showEmoji ? <EmojiPicker emojiStyle='facebook' style={{ zIndex: "10", background: "var(--bgTertiary)" }} onEmojiClick={onEmojiClick} /> : <></>}
+            {showEmoji ? <EmojiPicker emojiStyle='apple' style={{ zIndex: "10" }} onEmojiClick={onEmojiClick} /> : <></>}
           </div>
           <button className={styles.inputBarButtons} onClick={() => { setShowEmoji(!showEmoji) }}><img src="https://cdn-icons-png.flaticon.com/128/569/569501.png" alt="" /></button>
           <button className={styles.inputBarButtons}></button>

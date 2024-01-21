@@ -1,13 +1,60 @@
 .container{
     width: 280px;
+    border-radius: 10px;
+    overflow: hidden;
     background-color: #272727;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
 }
 
 .container button{
+
+    display: flex;
+    align-items: center;
+    padding: 0px 10px;
+    border-radius: 5px;
     width: 100%;
+    text-align: left;
     height: 40px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: var(--chatColor);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+
+.buttons img{
+    filter: invert(1);
+}
+
+.container button img{
+    height: 16px;
+    margin-right: 10px;
+}
+
+.container button:hover{
+    background-color: var(--bgSecondary);
 }
 
 .reaction{
+    padding: 1px;
+    width: 100%;
+    height: 40px;
     display: flex;
+}
+
+.reaction button{
+    padding: 6px;
+    height: 100%;
+    aspect-ratio: 1;
+}
+
+.reaction button img{
+    height: 100%;
 }

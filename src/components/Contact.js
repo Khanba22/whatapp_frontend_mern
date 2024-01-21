@@ -6,7 +6,6 @@ import doubleTick from "../assets/icons8-double-tick-30.png"
 import { useDispatch, useSelector } from 'react-redux'
 import { updateChat } from '../redux/chatReducer'
 function Contact(props) {
-
     const dispatch = useDispatch()
     const data = props.data
     const selectContact= ()=>{
@@ -39,7 +38,7 @@ function Contact(props) {
                 </div>
                 <div className={styles.textContent}>
                     <img src={doubleTick} alt="" />
-                    <p>{data.chats[0] !== undefined ? data.chats[0].message.substring(0,35)+"...":""}
+                    <p>{data.chats[data.chats.length - 1] !== undefined ? data.chats[data.chats.length - 1].message.substring(0,35)+"...":""}
                     </p>
                 </div>
             </div>

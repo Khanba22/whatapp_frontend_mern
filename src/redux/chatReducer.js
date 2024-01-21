@@ -12,8 +12,6 @@ const chatReducer = createSlice({
     reducers:{
         updateChat:(state,action)=>{
             const data = action.payload.data
-            console.log("Data In Reducer")
-            console.log(data)
             return{
                 ...state,
                 name:data.name,
@@ -21,6 +19,12 @@ const chatReducer = createSlice({
                 contactNo:data.contactNo,
                 lastSeen:data.lastSeen,
                 profilePicture:data.profilePicture
+            }
+        },
+        deleteChat:(state,action)=>{
+            const data = action.payload.data
+            return{
+                ...state,
             }
         }
     }
