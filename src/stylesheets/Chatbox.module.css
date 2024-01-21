@@ -184,8 +184,11 @@
 .replyDiv{
     background-color: var(--bgSecondary);
     z-index: 3;
+    padding: 10px;
+    padding-left: 90px;
     bottom: calc(5.3vh - (8px));
     left: 0;
+    font-size: 90%;
     width: 100%;
     position: absolute;
     color: var(--chatTertiary);
@@ -193,11 +196,14 @@
 
 
 .replyContent{
-    padding: 0px 10px;
+    padding: 0px 0px;
+    font-size: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
+
 
 .replyContent button{
     height: 20px;

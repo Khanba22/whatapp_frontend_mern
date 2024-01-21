@@ -87,18 +87,36 @@ function Chatbox() {
   })
 
   const renderOptionTab = (e) => {
-    setShowOptions(false)
-    setPos({
-      x: e.clientX - 425,
-      y: e.clientY - 30
+    e.preventDefault()
+    const heightBox = 230 // The height of Context Menu
+    e.preventDefault()
+    console.log(e.target.id)
+    const reply = { ...JSON.parse(e.target.id)}
+    dispatch({
+      type: `${editReply}`,
+      payload: {
+        data: reply
+      }
     })
+    setShowOptions(true)
+    if (e.clientY < window.innerHeight - heightBox) {
+      setPos({
+        x: e.clientX - 425,
+        y: e.clientY - 30
+      })
+    } else {
+      setPos({
+        x: e.clientX - 425,
+        y: e.clientY - heightBox
+      })
+    }
   }
 
 
   return (
     <>
       <div className={styles.container} onClick={() => {
-        setShowOptions(true)
+        setShowOptions(false)
       }} >
         <div className={styles.chatInfoTab}>
           <img src={chatInfo.profilePicture} alt="" className={styles.profilePicture} />
@@ -109,8 +127,8 @@ function Chatbox() {
         </div>
         <div ref={chatRef} className={styles.chatHolder}>
           {
-            !showOptions ? <div className={styles.optionContainer} style={{left: pos.x, top: pos.y }}>
-                  <OptionTab/>
+            showOptions ? <div className={styles.optionContainer} style={{ left: pos.x, top: pos.y }}>
+              <OptionTab />
             </div> : <></>
           }
           {
@@ -140,7 +158,7 @@ function Chatbox() {
           <button className={styles.inputBarButtons} onClick={() => { setShowEmoji(!showEmoji) }}><img src="https://cdn-icons-png.flaticon.com/128/569/569501.png" alt="" /></button>
           <button className={styles.inputBarButtons}></button>
           <form className={styles.inputForm}>
-            <input type="text" ref={inputRef} value={message} onChange={handleChange} />
+            <input id='writingSection' type="text" ref={inputRef} value={message} onChange={handleChange} />
             <button className={styles.sendButton} onClick={sendMessage}><img src={send} alt="" /></button>
           </form>
         </div>

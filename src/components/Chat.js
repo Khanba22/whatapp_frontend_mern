@@ -8,7 +8,6 @@ function Chat(props) {
     const data = props.data
     const reply = data.reply
 
-    console.log(data)
     const leftChatStyles = data.reply && {
         borderLeft: `5px solid ${data.reply.color}`,
         backgroundColor: "var(--chatBackground2secondary)"
@@ -19,8 +18,10 @@ function Chat(props) {
     }
     const selectReply = (e) => {
         e.preventDefault()
-        const reply = { ...props.data, show: true }
-        console.log(reply)
+        console.log("E.target.value")
+        console.log()
+        console.log(props.data)
+        const reply = { ...JSON.parse(e.target.id), show: true }
         dispatch({
             type: `${editReply}`,
             payload: {
@@ -30,20 +31,20 @@ function Chat(props) {
     }
 
     return (
-        <div style={{ zIndex: '3' }} id={`${data.sender}${data.message}${data.time}`} value={data} onContextMenu={selectReply} className={data.sender !== "you" ? styles.leftChat : styles.rightChat}>
+        <div style={{ zIndex: '3' }} id={JSON.stringify(data)} onContextMenu={props.renderOptionTab} className={data.sender !== "you" ? styles.leftChat : styles.rightChat}>
             {/* Put The conditions for grp chat later Idiot :D */}
             {reply !== undefined && <>
-                <div value={data} onContextMenu={props.renderOptionTab} style={data.sender !== "you" ? leftChatStyles : rightChatStyles} className={styles.replyHolder}>
-                    <p style={{ color: data.reply.color }}>{data.reply.sender}</p>
-                    <p>{data.reply.message}</p>
+                <div id={JSON.stringify(data)} onContextMenu={props.renderOptionTab} style={data.sender !== "you" ? leftChatStyles : rightChatStyles} className={styles.replyHolder}>
+                    <p id={JSON.stringify(data)} onContextMenu={props.renderOptionTab} style={{ color: data.reply.color, fontSize: "120%" }}>{data.reply.sender}</p>
+                    <p id={JSON.stringify(data)} onContextMenu={props.renderOptionTab} >{data.reply.message}</p>
                 </div>
             </>}
             {/* Set The Div Box For Reactions and replies later */}
 
             {false ? <h4 style={{ color: data.color }} >{data.sender !== "you" ? data.sender : ""}</h4> : <></>}
-            <p value={data} onContextMenu={props.renderOptionTab}>{data.message}</p>
+            <p id={JSON.stringify(data)} onContextMenu={props.renderOptionTab}>{data.message}</p>
             <div className={styles.foot}>
-                <span value={data} onContextMenu={selectReply}>{data.time}</span>
+                <span>{data.time}</span>
                 <span>s</span>
             </div>
         </div>
