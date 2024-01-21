@@ -93,7 +93,7 @@ function Chatbox() {
 
   const renderOptionTab = (e) => {
     e.preventDefault()
-    const heightBox = 230 // The height of Context Menu
+    const heightBox = 350 // The height of Context Menu
     e.preventDefault()
     const reply = { ...JSON.parse(e.target.id)}
     dispatch({

@@ -34,3 +34,25 @@
         align-items: center;
     }
 }
+
+
+::-webkit-scrollbar {
+    width: 10px;
+    margin-left: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(27, 27, 27); 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(54, 54, 54); 
+  }
