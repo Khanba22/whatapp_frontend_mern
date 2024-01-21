@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bgTertiary: rgb(52 52 52);
+    --bgPrimary: rgb(32 32 32);
+    --bgSecondary: rgb(44 44 44);
+    --chatColor: #c7dbd7;
+    --chatTertiary: #a3a3a3;
+    --chatBackground1: rgb(0 92 75);
+    --chatBackground1secondary:rgb(27 107 93);
+    --chatBackground2: rgb(54 54 54);
+    --chatBackground2secondary:rgb(74 74 74);
+}
+
+
+
+@media screen and (max-width:600px) {
+    *::-webkit-scrollbar {
+        display: none;
+    }
+    html,body{
+        width: 100vw;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

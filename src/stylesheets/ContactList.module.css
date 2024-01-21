@@ -1,0 +1,48 @@
+.container{
+    border-radius: 20px 0px 0px 20px;
+    width: clamp(400px,30vw,500px);
+    background-color: var(--bgSecondary);
+    height: 100%;
+    border: 1px solid var(--bgPrimary);
+    -webkit-border-radius: 20px 0px 0px 20px;
+    -moz-border-radius: 20px 0px 0px 20px;
+    -ms-border-radius: 20px 0px 0px 20px;
+    -o-border-radius: 20px 0px 0px 20px;
+}
+
+.holder{
+    height: 85%;
+    overflow-y: scroll;
+}
+
+.holder::-webkit-scrollbar{
+    display: none;
+}
+
+.header{
+    height: 13%;
+}
+
+.header h2{
+    padding-top: 10px;
+    padding-left: 20px;
+    color: var(--chatColor);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.searchBar{
+    background-color: var(--bgTertiary);
+    outline: none;
+    border: none;
+    border-bottom: 1px solid var(--chatColor);
+    width: 90%;
+    height: 40px;
+    margin: 10px 0px 0px 5%;
+    padding:0px 30px ;
+    color: var(--chatColor);
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
