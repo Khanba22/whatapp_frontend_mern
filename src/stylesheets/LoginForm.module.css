@@ -1,0 +1,88 @@
+.loginContainer {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.loginForm h1 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.loginForm p {
+    margin-bottom: 20px;
+    color: #777;
+}
+
+.inputGroup {
+    margin-bottom: 20px;
+}
+
+.inputGroup input {
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 100%;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.inputGroup input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.loginContainer button {
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.bottomtext {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    color: #777;
+}
+
+.bottomtext p {
+    margin-bottom: 10px;
+}
+
+.bottomtext a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.bottomtext a:hover {
+    color: #0056b3;
+}
+
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .login-container {
+        width: 100%;
+        border-radius: 0;
+    }
+}

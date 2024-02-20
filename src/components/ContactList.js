@@ -10,6 +10,16 @@ function ContactList() {
 
   const details = useSelector((state)=>state.user)
 
+  const updateUsername = (e)=>{
+    dispatch({
+      type:`${changeDetails}`,
+      payload:{
+        name:"username",
+        value:e.target.value
+      }
+    })
+  }
+
   const getContacts = ()=>{
       dispatch({
         type:`${changeDetails}`,
@@ -32,7 +42,7 @@ function ContactList() {
           <img src="" alt="" />
           <img src="" alt="" />
         </div>
-        <input type="text" placeholder='Search For messages and Chats' className={styles.searchBar}/>
+        <input onChange={updateUsername} type="text" placeholder='Search For messages and Chats' className={styles.searchBar}/>
       </div>
       <div className={styles.holder}>
         {

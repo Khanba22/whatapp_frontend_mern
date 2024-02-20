@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -15,9 +14,9 @@
     --chatColor: #c7dbd7;
     --chatTertiary: #a3a3a3;
     --chatBackground1: rgb(0 92 75);
-    --chatBackground1secondary:rgb(27 107 93);
+    --chatBackground1secondary: rgb(27 107 93);
     --chatBackground2: rgb(54 54 54);
-    --chatBackground2secondary:rgb(74 74 74);
+    --chatBackground2secondary: rgb(74 74 74);
 }
 
 
@@ -26,7 +25,9 @@
     *::-webkit-scrollbar {
         display: none;
     }
-    html,body{
+
+    html,
+    body {
         width: 100vw;
         padding: 0;
         display: flex;
@@ -39,20 +40,20 @@
 ::-webkit-scrollbar {
     width: 10px;
     margin-left: 5px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
+}
+
+/* Track */
+::-webkit-scrollbar-track {
     border-radius: 10px;
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: rgb(27, 27, 27); 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(27, 27, 27);
     border-radius: 10px;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgb(54, 54, 54); 
-  }
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(54, 54, 54);
+}

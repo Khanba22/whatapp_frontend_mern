@@ -13,8 +13,22 @@ const userReducers = createSlice({
                 ...state,
                 [name]: action.payload.value
             }
+        },
+        updateUserChats:(state,action)=>{
+            return {
+                ...state,
+                contacts:action.payload.contacts
+            }
+        },
+        readChats : (state,action)=>{
+            // const contact = action.payload.contact
+            
+            return {
+                ...state,
+            }
         }
+
     }
 })
-export const { changeDetails } = userReducers.actions
+export const { changeDetails , updateUserChats } = userReducers.actions
 export default userReducers.reducer;

@@ -1,10 +1,11 @@
 import React from 'react'
 import styles from "../stylesheets/Chat.module.css"
-import { editReply } from '../redux/replyReducer'
-import { useDispatch } from 'react-redux'
+// import { editReply } from '../redux/replyReducer'
+import { useSelector } from 'react-redux'
 
 function Chat(props) {
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
+    const user = useSelector(state=>state.user)
     const data = props.data
     const reply = data.reply
 
@@ -16,19 +17,19 @@ function Chat(props) {
         borderLeft: `5px solid ${data.reply.color}`,
         backgroundColor: "var(--chatBackground1secondary)"
     }
-    const selectReply = (e) => {
-        e.preventDefault()
-        const reply = { ...JSON.parse(e.target.id), show: true }
-        dispatch({
-            type: `${editReply}`,
-            payload: {
-                data: reply
-            }
-        })
-    }
+    // const selectReply = (e) => {
+    //     e.preventDefault()
+    //     const reply = { ...JSON.parse(e.target.id), show: true }
+    //     dispatch({
+    //         type: `${editReply}`,
+    //         payload: {
+    //             data: reply
+    //         }
+    //     })
+    // }
 
     return (
-        <div style={{ zIndex: '3' }} id={JSON.stringify(data)} onContextMenu={props.renderOptionTab} className={data.sender !== "you" ? styles.leftChat : styles.rightChat}>
+        <div style={{ zIndex: '3' }} id={JSON.stringify(data)} onContextMenu={props.renderOptionTab} className={data.sender !== user.username ? styles.leftChat : styles.rightChat}>
             {/* Put The conditions for grp chat later Idiot :D */}
             {reply !== undefined && <>
                 <div id={JSON.stringify(data)} onContextMenu={props.renderOptionTab} style={data.sender !== "you" ? leftChatStyles : rightChatStyles} className={styles.replyHolder}>
@@ -41,7 +42,7 @@ function Chat(props) {
             <p id={JSON.stringify(data)} onContextMenu={props.renderOptionTab}>{data.message}</p>
             <div className={styles.foot}>
                 <span>{data.time}</span>
-                <span>s</span>
+                <span>{data.status ? data.status.substring(0,1):"w"}</span>
             </div>
         </div>
     )
