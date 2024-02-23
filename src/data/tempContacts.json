@@ -1,6 +1,6 @@
 [
   {
-    "name": "Tushar Gandu",
+    "username": "Tushar Gandu",
     "contactNo": "1658121206",
     "lastSeen": "3:13 PM",
     "chats": [
@@ -315,7 +315,7 @@
     "profilePicture": "http://dummyimage.com/156x100.png/cc0000/ffffff"
   },
   {
-    "name": "Mari",
+    "username": "Mari",
     "contactNo": "9354110465",
     "lastSeen": "2:36 AM",
     "chats": [
@@ -611,7 +611,7 @@
     "profilePicture": "http://dummyimage.com/233x100.png/5fa2dd/ffffff"
   },
   {
-    "name": "Constancia",
+    "username": "Constancia",
     "contactNo": "4752599906",
     "lastSeen": "7:29 AM",
     "chats": [
@@ -901,7 +901,7 @@
     "profilePicture": "http://dummyimage.com/139x100.png/dddddd/000000"
   },
   {
-    "name": "Evanne",
+    "username": "Evanne",
     "contactNo": "4661007423",
     "lastSeen": "1:03 PM",
     "chats": [
@@ -1185,7 +1185,7 @@
     "profilePicture": "http://dummyimage.com/208x100.png/5fa2dd/ffffff"
   },
   {
-    "name": "Rebekah",
+    "username": "Rebekah",
     "contactNo": "4575865439",
     "lastSeen": "9:06 AM",
     "chats": [
@@ -1457,7 +1457,7 @@
     "profilePicture": "http://dummyimage.com/158x100.png/ff4444/ffffff"
   },
   {
-    "name": "Shantee",
+    "username": "Shantee",
     "contactNo": "6815191914",
     "lastSeen": "1:22 PM",
     "chats": [
@@ -1765,7 +1765,7 @@
     "profilePicture": "http://dummyimage.com/116x100.png/5fa2dd/ffffff"
   },
   {
-    "name": "Mandi",
+    "username": "Mandi",
     "contactNo": "8209344589",
     "lastSeen": "3:03 PM",
     "chats": [

@@ -4,213 +4,40 @@ import EmojiPicker from 'emoji-picker-react';
 import send from "../assets/send.png"
 import close from "../assets/close.png"
 import arrowDown from "../assets/arrowDoubleDown.png"
-import { io } from 'socket.io-client';
-// import {io} from "socket.io-client"
+import io from 'socket.io-client';
 import Chat from './Chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { editReply } from '../redux/replyReducer';
 import OptionTab from './OptionTab';
-import { updateUserChats } from '../redux/userReducer';
-import { updateChat } from '../redux/chatReducer';
+import { updateUserChatStatus, updateUserChats } from '../redux/userReducer';
+import { updateChatStatus, updateChat } from '../redux/chatReducer';
 
 function Chatbox() {
+
+  const addChatToContact = (chat) => {
+    var updatedChats = [...chatInfo.chats]
+    updatedChats.push(chat)
+    return updatedChats
+  }
+
+  const addChatToUser = (chat) => {
+    var contacts = user.contacts
+    console.log(chat.sender)
+    var contact = contacts.find(contact => contact.username === chat.sender)
+    contacts = contacts.filter(contact => contact.username !== chat.sender)
+    if (contact) {
+      contact = {
+        ...contact,
+        chats: [...contact.chats, chat]
+      }
+      console.log(contact)
+      contacts.unshift(contact)
+    }
+    return contacts
+  }
+
   const dispatch = useDispatch()
-  var chatInfo = useSelector(state => state.chatDetails)
-  var reply = useSelector(state => state.reply)
-  const user = useSelector(state => state.user)
-  const socket = io("http://localhost:4000", {
-    query: {
-      username: user.username
-    }
-  })
-
-  useEffect(() => {
-    socket.emit('read-message', { name: user.username, sender: chatInfo.name })
-  }, [chatInfo.name,socket,user.username])
-
   const [showEmoji, setShowEmoji] = useState(false)
-  const [pos, setPos] = useState({ x: 0, y: 0 })
-  const [message, setMessage] = useState("");
-  const [showOptions, setShowOptions] = useState(false)
-  const inputRef = useRef(null);
-  const chatRef = useRef(null)
-  const onEmojiClick = (e, emojiObject) => {
-    setMessage(message + e.emoji)
-    console.log(message)
-  }
-
-
-  const updateContactChat = (data) => {
-    var contacts = [...user.contacts];
-    var contact = contacts.find(contact => contact.name === data.sender);
-    contacts = contacts.filter(contact => contact.name !== data.sender)
-    console.log(contacts)
-    contact = {
-      ...contact,
-      chats: [...contact.chats, data]
-    }
-    contacts.push(contact)
-    dispatch({
-      type: `${updateUserChats}`,
-      payload: {
-        contacts: contacts
-      }
-    });
-    dispatch({
-      type: `${updateChat}`,
-      payload: {
-        data: { ...chatInfo, chats: [...chatInfo.chats, data], show: true }
-      }
-    })
-
-  }
-
-
-  useEffect(() => {
-    socket.connect()
-
-    return () => {
-      socket.disconnect()
-    }
-  }, [socket])
-
-  socket.on("receive-message", (data) => {
-    updateContactChat(data)
-    setTimeout(() => {
-      document.getElementById('lowest').scrollIntoView()
-    }, 100);
-  });
-
-  socket.on('sent-successful', (data) => {
-    var contacts = [...user.contacts]; // Create a new array to ensure mutability
-    alert("Sent Successful Called")
-    var tcontact = contacts.find(contact => contact.name === chatInfo.name);
-    if (tcontact) {
-      contacts = contacts.map(contact => {
-        if (tcontact.name === data.name) {
-          return { ...contact, chats: contact.chats.map(chat => { return { ...chat, status: "sent" } }) }
-        }else{
-          return {...contact}
-        }
-      })
-    }
-    dispatch({
-      type: `${updateUserChats}`,
-      payload: {
-        contacts: contacts // Update the user's contacts
-      }
-    });
-    dispatch({
-      type: `${updateChat}`,
-      payload: {
-        data: { ...chatInfo, chats: [...chatInfo.chats, data], show: true }
-      }
-    })
-  })
-
-
-  const handleChange = (event) => {
-    setMessage(event.target.value);
-  }
-
-  const cancelReply = () => {
-    dispatch({
-      type: `${editReply}`,
-      payload: {
-        data: {
-          show: false
-        }
-      }
-    })
-  }
-
-  const sendMessage = (e) => {
-    e.preventDefault()
-    const date = new Date()
-    const time = `${date.getHours()}:${date.getMinutes()}`
-    var data = {
-      to: {
-        name: chatInfo.name,
-        contactNo: chatInfo.contactNo,
-      },
-      status: "waiting",
-      sender: user.username,
-      contactNo: user.contactNo,
-      color: "#68f3a7",
-      message: message,
-      time: time
-    }
-    if (reply.show) {
-      data = {
-        ...data,
-        reply: {
-          "sender": reply.sender,
-          "color": reply.color,
-          "message": reply.message,
-          "time": reply.time
-        },
-      }
-    }
-    socket.emit('send-message', data)
-    setMessage("")
-    var contacts = [...user.contacts]; // Create a new array to ensure mutability
-    var contact = contacts.find(contact => contact.name === chatInfo.name);
-    contacts = contacts.filter(contact => contact.name !== chatInfo.name)
-    contact = {
-      ...contact,
-      chats: [...contact.chats, data]
-    }
-    contacts.unshift(contact)
-    dispatch({
-      type: `${updateUserChats}`,
-      payload: {
-        contacts: contacts // Update the user's contacts
-      }
-    });
-    dispatch({
-      type: `${updateChat}`,
-      payload: {
-        data: { ...chatInfo, chats: [...chatInfo.chats, data], show: true }
-      }
-    })
-    cancelReply()
-    setTimeout(() => {
-      document.getElementById('lowest').scrollIntoView()
-    }, 100);
-  }
-
-  
-
-  // socket.on('read', (data) => {
-  //   var contacts = [...user.contacts]; // Create a new array to ensure mutability
-  //   var targetContact = contacts.find(contact => contact.name === chatInfo.name);
-  //   if (targetContact) {
-  //     contacts = contacts.map(contact => {
-  //       if (targetContact.name === contact.name) {
-  //         return {
-  //           ...contact,
-  //           chats: [contact.chats.map(chat => { return { ...chat, status: "read" } })]
-  //         }
-  //       } else {
-  //         return { ...contact }
-  //       }
-  //     })
-  //   }
-  //   dispatch({
-  //     type: `${updateUserChats}`,
-  //     payload: {
-  //       contacts: contacts // Update the user's contacts
-  //     }
-  //   });
-  //   dispatch({
-  //     type: `${updateChat}`,
-  //     payload: {
-  //       data: { ...chatInfo, chats: [...chatInfo.chats, data], show: true }
-  //     }
-  //   })
-  // })
-
-
   const renderOptionTab = (e) => {
     e.preventDefault()
     const heightBox = 350 // The height of Context Menu
@@ -235,6 +62,175 @@ function Chatbox() {
       })
     }
   }
+  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const [message, setMessage] = useState("");
+  const [showOptions, setShowOptions] = useState(false)
+  const inputRef = useRef(null);
+  const chatRef = useRef(null)
+  const onEmojiClick = (e, emojiObject) => {
+    setMessage(message + e.emoji)
+    console.log(message)
+  }
+  var chatInfo = useSelector(state => state.chatDetails)
+  var reply = useSelector(state => state.reply)
+  var user = useSelector(state => state.user)
+
+  const socket = io("http://localhost:4000", {
+    query: {
+      username: user.username
+    },
+  });
+
+
+  useEffect(() => {
+    if (chatInfo.name !== "") {
+      setTimeout(() => {
+        socket.emit('read-message', { to: chatInfo.username, from: user.username })
+        document.getElementById('lowest').scrollIntoView({
+          behavior: "smooth",
+          inline: "start"
+        })
+      }, 100);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatInfo.username])
+
+
+  useEffect(() => {
+    socket.connect()
+
+    return () => {
+      socket.disconnect()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  socket.on("receive-message", (data) => {
+    const updatedContacts = addChatToUser(data)
+    dispatch({
+      type: `${updateUserChats}`,
+      payload: {
+        contacts: updatedContacts
+      }
+    })
+    if (data.username === chatInfo.username) {
+      dispatch({
+        type: `${updateChatStatus}`,
+        payload: {
+          status: "read"
+        }
+      })
+    }
+    setTimeout(() => {
+      document.getElementById('lowest').scrollIntoView()
+    }, 100);
+  });
+
+  socket.on('sent-successful', (data) => {
+    dispatch({
+      type: `${updateUserChatStatus}`,
+      payload: {
+        contactName: data.username,
+        status: "sent"
+      }
+    })
+
+    if (chatInfo.username === data.username) {
+      dispatch({
+        type: `${updateChatStatus}`,
+        payload: {
+          status: "sent"
+        }
+      })
+    }
+  })
+
+  socket.on('read', (data) => { 
+    dispatch({
+      type: `${updateUserChatStatus}`,
+      payload: {
+        contactName: data.username,
+        status: "read"
+      }
+    })
+
+    if (chatInfo.username === data.username) {
+      dispatch({
+        type: `${updateChatStatus}`,
+        payload: {
+          status: "read"
+        }
+      })
+    }
+
+  })
+
+
+  const handleChange = (event) => {
+    setMessage(event.target.value);
+  }
+
+  const cancelReply = () => {
+    dispatch({
+      type: `${editReply}`,
+      payload: {
+        data: {
+          show: false
+        }
+      }
+    })
+  }
+
+  const sendMessage = (e) => {
+    e.preventDefault()
+    const date = new Date()
+    const time = `${date.getHours()}:${date.getMinutes()}`
+    var data = {
+      to: {
+        username: chatInfo.username,
+        contactNo: chatInfo.contactNo,
+      },
+      status: "waiting",
+      sender: user.username,
+      contactNo: user.contactNo,
+      color: "#68f3a7",
+      message: message,
+      time: time
+    }
+    if (reply.show) {
+      data = {
+        ...data,
+        reply: {
+          "sender": reply.sender,
+          "color": reply.color,
+          "message": reply.message,
+          "time": reply.time
+        },
+      }
+    }
+    socket.emit('send-message', data)
+    setMessage("")
+    const updatedContacts = addChatToUser(data)
+    dispatch({
+      type: `${updateUserChats}`,
+      payload: {
+        contacts: updatedContacts
+      }
+    })
+    if (chatInfo.username === data.to.username) {
+      dispatch({
+        type: `${updateChat}`,
+        payload: {
+          chats: addChatToContact(data)
+        }
+      })
+    }
+    cancelReply()
+    setTimeout(() => {
+      document.getElementById('lowest').scrollIntoView()
+    }, 100);
+  }
+
 
 
   return (
@@ -245,7 +241,7 @@ function Chatbox() {
         <div className={styles.chatInfoTab}>
           <img src={chatInfo.profilePicture} alt="" className={styles.profilePicture} />
           <div className={styles.chatInfoTabRight}>
-            <h2 className={styles.chatName}>{chatInfo.name}</h2>
+            <h2 className={styles.chatName}>{chatInfo.username}</h2>
             <p>last seen {chatInfo.lastSeen}</p>
           </div>
         </div>

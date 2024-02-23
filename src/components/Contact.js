@@ -4,41 +4,43 @@ import styles from '../stylesheets/Contact.module.css'
 import doubleTick from "../assets/icons8-double-tick-30.png"
 // import blueTick from "../assets/blueTick.png"
 import { useDispatch, useSelector } from 'react-redux'
-import { updateChat } from '../redux/chatReducer'
+import { updateChat, updateChatStatus } from '../redux/chatReducer'
+
 function Contact(props) {
     const dispatch = useDispatch()
     const data = props.data
-    const selectContact= ()=>{
+    const selectContact = () => {
         dispatch({
-          type:`${updateChat}`,
-          payload:{
-            data:{...props.data,show:true}
-          }
+            type: `${updateChat}`,
+            payload: {
+                ...props.data,
+                show: true
+            }
         })
         setSelected(true)
     }
-    const chat = useSelector(state=>state.chatDetails)
-    const [selected,setSelected] = useState(false)
+    const chat = useSelector(state => state.chatDetails)
+    const [selected, setSelected] = useState(false)
 
-    useEffect(()=>{
+    useEffect(() => {
         if (chat.contactNo === data.contactNo) {
             setSelected(true)
-        }else{
+        } else {
             setSelected(false)
         }
-    },[chat])
+    }, [chat])
 
     return (
-        <div onClick={selectContact} className={styles.container} style={selected ? {backgroundColor:"var(--bgTertiary)"}:{}}>
+        <div onClick={selectContact} className={styles.container} style={selected ? { backgroundColor: "var(--bgTertiary)" } : {}}>
             <img className={styles.profileImage} src={data.profilePicture} alt="" />
             <div className={styles.content}>
                 <div className={styles.nameLine}>
-                    <h3>{data.name}</h3>
+                    <h3>{data.username}</h3>
                     <span className={styles.timeStamp}>12-12-1222</span>
                 </div>
                 <div className={styles.textContent}>
                     <img src={doubleTick} alt="" />
-                    <p>{data.chats[data.chats.length - 1] !== undefined ? data.chats[data.chats.length - 1].message.substring(0,35)+"...":""}
+                    <p>{data.chats[data.chats.length - 1] !== undefined ? data.chats[data.chats.length - 1].message.substring(0, 35) + "..." : ""}
                     </p>
                 </div>
             </div>

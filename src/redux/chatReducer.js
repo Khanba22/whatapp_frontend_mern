@@ -3,46 +3,33 @@ import { createSlice } from "@reduxjs/toolkit";
 const chatReducer = createSlice({
     name:"chatReducer",
     initialState: {
-        name:"",
-        contactNo:"",
-        profilePicture:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReG1Q1niGCxmNCzqY0JntvFVoiA2JNRHiMhHB8dRrikQ&s",
-        lastSeen:"",
-        chats: []
+        username: "",
+        contactNo: "1658121206",
+        lastSeen: "3:13 PM",
+        chats: [],
+        profilePicture: "http://dummyimage.com/156x100.png/cc0000/ffffff"
     },
     reducers:{
-        readChat:(state,action)=>{
-            if (state.name === action.payload.name) {
-                var newChats = [state.chats.map(chat=>{return {...chat,status:"read"}})]
-            }
+        updateChat:(state,action)=>{
             return {
                 ...state,
-                chats:newChats
+                ...action.payload,
+                chats:action.payload.chats
             }
         },
-        updateChat:(state,action)=>{
-            const data = action.payload.data
-            if (data) {
-                return{
-                    ...state,
-                    name:data.name,
-                    chats:data.chats,
-                    contactNo:data.contactNo,
-                    lastSeen:data.lastSeen,
-                    profilePicture:data.profilePicture
-                }
-            }else{
-                return {
-                    ...state,
-                }
-            }
-        },
-        deleteChat:(state,action)=>{
-            // const data = action.payload.data
-            return{
+        updateChatStatus:(state,action)=>{
+            const {status} = action.payload
+            return {
                 ...state,
-            }
+                chats: state.chats.map(chat => {
+                    return {
+                        ...chat,
+                        status:status
+                    };
+                })
+            };
         }
     }
 })
-export const {updateChat} = chatReducer.actions
+export const {updateChat,updateChatStatus} = chatReducer.actions
 export default  chatReducer.reducer;

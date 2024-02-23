@@ -9,11 +9,12 @@ const connectToMongo = require("./DB")
 
 connectToMongo()
 
-const io = new Server(server,{
-    cors:{
-        methods:["GET","POST","PUT","DELETE"]
-    }
-})
+const io = new Server(server, {
+  cors: {
+    origin: ["https://my-frontend.com", "https://my-other-frontend.com", "http://localhost:3000"],
+    // credentials: true
+  }
+});
 
 const users = new Map()
 
@@ -22,19 +23,18 @@ io.on("connection",(socket)=> {
     const {username} = socket.handshake.query
     users.set(username,socket.id)
 
-
     socket.on("send-message", (data)=>{
-        const senderId = users.get(data.sender)
-        console.log("Sender = " + data.sender + " " + senderId)
-        // socket.emit("sent-successful",{...data,status:"sent"})
-        const userId = users.get(data.to.name)
-        delete data.to
-        socket.to(userId).emit("receive-message", data)
+        socket.emit("sent-successful",{username:data.to.username})
+        console.log(data.to.username)
+        const userId = users.get(data.to.username)
+        setTimeout(() => {
+            socket.to(userId).emit("receive-message", data)
+        }, 100);
     })
 
     socket.on("read-message",(data)=>{
-        const sender = users.get(data.sender)
-        socket.to(sender).emit("read",{name:data.name})
+        const sender = users.get(data.to)
+        socket.to(sender).emit("read",{username:data.from})
     })
 
     socket.on("disconnect",()=>{

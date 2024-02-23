@@ -47,7 +47,11 @@ function ContactList() {
       <div className={styles.holder}>
         {
           details.contacts.map(contact => {
-            return <Contact key={details.contacts.indexOf(contact)} data = {contact} />
+            if (contact.username !== details.username) {
+              return <Contact key={JSON.stringify(details.contacts.indexOf(contact))} data = {contact} />
+            }else{
+              return <></>
+            }
           })
         }
       </div>
