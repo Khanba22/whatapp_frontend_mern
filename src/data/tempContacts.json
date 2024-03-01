@@ -309,7 +309,8 @@
         "sender": "you",
         "color": "#216bd9",
         "message": "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.",
-        "time": "2:11 AM"
+        "time": "2:11 AM",
+        "reactions" : ["smile","smile", "saf"]
       }
     ],
     "profilePicture": "http://dummyimage.com/156x100.png/cc0000/ffffff"

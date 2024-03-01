@@ -1,7 +1,8 @@
 .container{
+    z-index: 2;
     width: 280px;
     border-radius: 10px;
-    overflow: hidden;
+    /* overflow: hidden; */
     background-color: #272727;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -9,8 +10,7 @@
     -o-border-radius: 10px;
 }
 
-.container button{
-
+.container .buttons{
     display: flex;
     align-items: center;
     padding: 0px 10px;
@@ -33,13 +33,24 @@
     filter: invert(1);
 }
 
-.container button img{
+.buttons img{
     height: 16px;
     margin-right: 10px;
 }
 
-.container button:hover{
+.buttons:hover{
     background-color: var(--bgSecondary);
+}
+
+.reactionButtons{
+    outline: none;
+    border: none;
+    background-color: #272727;
+}
+
+.reactionButtons:hover{
+    background-color: var(--bgSecondary);
+
 }
 
 .reaction{
@@ -57,4 +68,9 @@
 
 .reaction button img{
     height: 100%;
+}
+
+.emojiDiv{
+    position: absolute;
+    left: 100%;
 }

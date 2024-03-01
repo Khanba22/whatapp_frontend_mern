@@ -1,35 +1,29 @@
 #include <iostream>
 using namespace std;
 #include <cmath>
+#include <vector>
 #include <iomanip>
 int main()
 {
-    while (1)
+    int n;
+    cin >>n;
+    vector <int> V{n};
+    for (int i = 0; i < n; i++)
     {
-
-        int n;
-        cin >> n;
-        if (n == 0)
+        cin >> V[i];
+    }
+    int Q;
+    cin >> Q;
+    while (Q--)
+    {
+        int s , e;
+        long sum = 0;
+        cin >> s >> e;
+        for (int i = s; i <= e; i++)
         {
-            break;
+            sum+= V[i];
         }
-        int s[n];
-        double sum = 0;
-        for (int i = 0; i < n; i++)
-        {
-            cin >> s[i];
-            sum = sum + s[i];
-        }
-        double m = sum / n;
-        double std = 0;
-        for (int i = 0; i < n; i++)
-        {
-            double dev = (s[i] - m) * (s[i] - m);
-            std+=dev;
-        }
-        std = sqrt(std / n);
-        cout << setprecision(10);
-        cout << std << "\n";
+        cout <<sum << endl;
     }
     return 0;
 }

@@ -53,9 +53,7 @@
     transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
-}
+
 
 .bottomtext {
     display: flex;
@@ -76,7 +74,7 @@ button:hover {
 }
 
 .bottomtext a:hover {
-    color: #0056b3;
+    /* color: #0056b3; */
 }
 
 /* Responsive */

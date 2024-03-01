@@ -6,6 +6,8 @@
 }
 
 .container{
+    display: flex;
+    flex-direction: column;
     width: clamp(300px,60%,100vw);
     position: relative;
     left: 0;
@@ -13,6 +15,20 @@
     margin: auto;
     height: 100%;
     border: 1px solid black;
+}
+
+.reaction{
+    background-color: black;
+    position: relative;
+    top: -15px;
+    left: 20px;
+    z-index: 3;
+    display: flex;
+    color: white;
+    align-items: center;
+    max-width: 20%;
+    height: 25px;
+    margin-bottom: -15px;
 }
 
 .leftChat , .rightChat{
@@ -79,7 +95,16 @@
 }
 
 
+.statusIcon{
+    height: 12px;
+    width: 12px;
+}
 
+.statusIcon img{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
 
 .foot{
     position: relative;

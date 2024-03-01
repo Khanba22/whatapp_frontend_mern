@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../stylesheets/Contact.module.css'
-// import tick from "../assets/icons8-done-50.png"
+import tick from "../assets/icons8-done-50.png"
 import doubleTick from "../assets/icons8-double-tick-30.png"
-// import blueTick from "../assets/blueTick.png"
+import blueTick from "../assets/blueTick.png"
+import clock from "../assets/clock.png"
 import { useDispatch, useSelector } from 'react-redux'
-import { updateChat, updateChatStatus } from '../redux/chatReducer'
+import { updateChat } from '../redux/chatReducer'
 
 function Contact(props) {
+    const user = useSelector(state => state.user)
     const dispatch = useDispatch()
     const data = props.data
+    const lastMessage = data.chats[data.chats.length - 1]
     const selectContact = () => {
         dispatch({
             type: `${updateChat}`,
@@ -36,11 +39,11 @@ function Contact(props) {
             <div className={styles.content}>
                 <div className={styles.nameLine}>
                     <h3>{data.username}</h3>
-                    <span className={styles.timeStamp}>12-12-1222</span>
+                    <span className={styles.timeStamp}>{lastMessage !== undefined ?lastMessage.time :""}</span>
                 </div>
                 <div className={styles.textContent}>
-                    <img src={doubleTick} alt="" />
-                    <p>{data.chats[data.chats.length - 1] !== undefined ? data.chats[data.chats.length - 1].message.substring(0, 35) + "..." : ""}
+                    {lastMessage !== undefined && lastMessage.sender === user.username ? <img src={lastMessage.status === "sent" ? doubleTick : lastMessage.status === "read" ? blueTick : clock} alt="" /> : <></>}
+                    <p>{lastMessage !== undefined ? lastMessage.message.substring(0, 35) + "..." : ""}
                     </p>
                 </div>
             </div>

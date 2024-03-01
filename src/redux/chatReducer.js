@@ -28,8 +28,24 @@ const chatReducer = createSlice({
                     };
                 })
             };
-        }
+        },
+        updateChatStatusLast:(state,action)=>{
+            const {status} = action.payload
+            return {
+                ...state,
+                chats: state.chats.map((chat,index)=>{
+                    if (index === state.chats.length - 1) {
+                        return {
+                            ...chat,
+                            status:status
+                        }
+                    }else{
+                        return chat
+                    }
+                })
+            };
+        },
     }
 })
-export const {updateChat,updateChatStatus} = chatReducer.actions
+export const {updateChat,updateChatStatus,updateChatStatusLast} = chatReducer.actions
 export default  chatReducer.reducer;

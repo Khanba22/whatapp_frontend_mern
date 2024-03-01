@@ -1,0 +1,21 @@
+.window{
+    display: flex;
+    height: 100vh;
+    padding: 30px 0px 0px 30px;
+}
+
+.mobile{
+    display: none;
+}
+
+
+
+@media screen and (max-width:580px) {
+    .window{
+        display: none;
+    }
+    .mobile{
+        height: 100vh;
+        display: flex;
+    }
+}
