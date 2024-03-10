@@ -42,6 +42,13 @@
     outline: none;
 }
 
+.authDiv{
+    display: flex;
+    width: 100%;
+    padding-top: 20px;
+    justify-content: center;
+}
+
 .loginContainer button {
     padding: 15px;
     border: none;

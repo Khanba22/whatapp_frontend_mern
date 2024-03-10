@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from "../stylesheets/Chatbox.module.css"
 import EmojiPicker from 'emoji-picker-react';
 import send from "../assets/send.png"
+import blank from "../assets/blankProfile.webp"
 import close from "../assets/close.png"
 import arrowDown from "../assets/arrowDoubleDown.png"
 import io from 'socket.io-client';
@@ -14,7 +15,54 @@ import { updateChatStatus, updateChat, updateChatStatusLast } from '../redux/cha
 
 function Chatbox() {
 
-  const [reactions,setReactions] = useState({})
+  const addReaction = (emoji,by) => {
+    dispatch({
+      type: `${updateUserChats}`,
+      payload: {
+        contacts: addReactionToUser(reply,emoji,by)
+      }
+    })
+    dispatch({
+      type: `${updateChat}`,
+      payload: {
+        chats: addReactionToChat(reply,emoji,by)
+      }
+    })
+  }
+
+  const addReactionToChat = (chat,reaction , by)=>{
+    var tempChats = [...chatInfo.chats]
+    tempChats = tempChats.map(chatMap=>{
+      if (chat.message === chatMap.message && chat.time === chatMap.time ) {
+        return {...chatMap,reactions:{...chatMap.reactions,[by]:reaction}}
+      }else{
+        return chatMap
+      }
+    })
+    return tempChats
+  }
+
+  const addReactionToUser = (chat, emoji , by) => {
+    var contacts = user.contacts
+    var contact = {}
+    contact = contacts.find(contact => contact.username === chat.sender)
+    contacts = contacts.filter(contact => contact.username !== chat.sender)
+    if (contact) {
+      contact = {
+        ...contact,
+        chats: contact.chats.map(chatMap => {
+          if (chat.message === chatMap.message && chat.time === chatMap.time && chat.sender === chatMap.sender) {
+            return { ...chatMap, reactions: { ...chatMap.reactions, [by]: emoji } }
+          }
+          return chatMap
+        })
+      }
+      console.log(contact.chats)
+      contacts.unshift(contact)
+    }
+    return contacts
+  }
+
 
   const addChatToContact = (chat) => {
     var updatedChats = [...chatInfo.chats]
@@ -65,7 +113,7 @@ function Chatbox() {
 
   const dispatch = useDispatch()
   const [showEmoji, setShowEmoji] = useState(false)
-  const renderOptionTab = (e , data) => {
+  const renderOptionTab = (e, data) => {
     e.preventDefault()
     const heightBox = 350 // The height of Context Menu
     const widthBox = 350
@@ -102,7 +150,6 @@ function Chatbox() {
 
 
   const onEmojiClick = (e, emojiObject) => {
-    console.log(reactions)
     setMessage(message + e.emoji)
   }
   var chatInfo = useSelector(state => state.chatDetails)
@@ -159,9 +206,15 @@ function Chatbox() {
         }
       })
     }
-    setTimeout(() => {
-      document.getElementById('lowest').scrollIntoView()
-    }, 100);
+    if (chatInfo.username === data.sender) {
+      setTimeout(() => {
+        socket.emit('read-message', { to: chatInfo.username, from: user.username })
+        document.getElementById('lowest').scrollIntoView({
+          behavior: "smooth",
+          inline: "start"
+        })
+      }, 100);
+    }
   });
 
   socket.on('sent-successful', (data) => {
@@ -221,7 +274,7 @@ function Chatbox() {
   const sendMessage = (e) => {
     e.preventDefault()
     const date = new Date()
-    const time = `${date.getHours()}:${date.getMinutes()}`
+    const time = `${date.toLocaleDateString()} , ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
     var data = {
       to: {
         username: chatInfo.username,
@@ -233,7 +286,8 @@ function Chatbox() {
       contactNo: user.contactNo,
       color: "#68f3a7",
       message: message,
-      time: time
+      time: time,
+      reactions:{}
     }
     if (reply.show) {
       data = {
@@ -274,7 +328,7 @@ function Chatbox() {
         setShowOptions(false)
       }} >
         <div className={styles.chatInfoTab}>
-          <img src={chatInfo.profilePicture} alt="" className={styles.profilePicture} />
+          <img src={chatInfo.profilePicture !== "" ? chatInfo.profilePicture : blank} alt="" className={styles.profilePicture} />
           <div className={styles.chatInfoTabRight}>
             <h2 className={styles.chatName}>{chatInfo.username}</h2>
             <p>last seen {chatInfo.lastSeen}</p>
@@ -283,12 +337,26 @@ function Chatbox() {
         <div ref={chatRef} className={styles.chatHolder}>
           {
             showOptions ? <div className={styles.optionContainer} style={{ left: pos.x, top: pos.y }}>
-              <OptionTab />
+              <OptionTab addReaction = {addReaction} />
             </div> : <></>
           }
           {
-            chatInfo.chats.map(chat => {
-              return <Chat renderOptionTab={renderOptionTab} data={chat} />
+            chatInfo.chats.map((chat, index) => {
+              if (chat.time) {
+                if (chat.time === chatInfo.chats[index - 1]) {
+                  return <>
+                    <h1>
+                      Hello
+                    </h1>
+                    <Chat renderOptionTab={renderOptionTab} data={chat} />
+
+                  </>
+                } else {
+                  return <Chat renderOptionTab={renderOptionTab} data={chat} />
+                }
+              } else {
+                return <Chat renderOptionTab={renderOptionTab} data={chat} />
+              }
             })
           }
           <button className={styles.latestLocator} onClick={() => {

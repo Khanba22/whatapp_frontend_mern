@@ -8,6 +8,7 @@ import store from "./redux/store";
 import ChatPage from "./pages/ChatPage";
 import { BrowserRouter , Routes , Route } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
+import SignUpForm from "./components/SignUpForm";
 function App() {
   return (
     <Provider store={store}>
@@ -15,7 +16,8 @@ function App() {
           <BrowserRouter>
             <Routes>
                 <Route path="/" element = {<LoginForm/>}/>
-                <Route path="/s" element = {<ChatPage/>} />
+                <Route path="/signup" element = {<SignUpForm/>}/>
+                <Route path="/chatPage" element = {<ChatPage/>} />
             </Routes>
           </BrowserRouter>
       </div>

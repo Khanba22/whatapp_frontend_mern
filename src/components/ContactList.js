@@ -13,8 +13,7 @@ function ContactList() {
     dispatch({
       type: `${changeDetails}`,
       payload: {
-        name: "username",
-        value: e.target.value
+        username: e.target.value
       }
     })
   }

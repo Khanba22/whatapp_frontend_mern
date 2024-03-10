@@ -5,6 +5,8 @@
         "cstdlib": "cpp",
         "system_error": "cpp",
         "xlocale": "cpp",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "istream": "cpp",
+        "vector": "cpp"
     }
 }

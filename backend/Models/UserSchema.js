@@ -27,7 +27,7 @@ const chatSchema = new mongoose.Schema({
     message: String,
     time: String
   },
-  reactions: [String] // Assuming reactions is optional and an array of strings
+  reactions: {} // Assuming reactions is optional and an array of strings
 });
 
 // Define the schema for the user object
@@ -54,7 +54,8 @@ const contactSchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema({
     username:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     lastSeen:{
         type:String
@@ -64,8 +65,18 @@ const userSchema = new mongoose.Schema({
         type:String
     },
     contactNo:{
-        type:String
-    } 
+        type:String,
+        unique:true
+    },
+    email:{
+      type:String,
+      required:true,
+      unique:true,
+    },
+    password:{
+      type:String,
+      required:true
+    }
 })
 
 // Create a Mongoose model based on the user schema

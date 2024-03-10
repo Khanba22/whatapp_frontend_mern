@@ -9,8 +9,13 @@ const connectToMongo = require("./DB")
 const bodyParser = require('body-parser')
 const User = require("./Models/UserSchema")
 const addChatToContact = require("./functions/AddMessageQuery")
-
 connectToMongo()
+// const {ExpressPeerServer} = require('peer')
+const fs = require('fs')
+
+// const servers = ExpressPeerServer()
+
+
 
 const io = new Server(server, {
     cors: {
@@ -24,39 +29,42 @@ const users = new Map()
 
 //Routes
 app.use("/fetchUser",require("./Routes/FetchUserDetails"))
+app.use("/createAccount",require("./Routes/createAccount"))
 
 
 //Socket IO 
-io.on("connection", (socket) => {
-    const { username } = socket.handshake.query
-    users.set(username, socket.id)
-    socket.broadcast.emit("online", { username: username })
-    const query = { username: username }
+io.on("connection", async(socket) => {
+    const { username } = socket.handshake.query;
+    users.set(username, socket.id);
+    socket.broadcast.emit("online", { username: username });
+    const query = { username: username };
     const update = { $set: { "lastSeen": "online" } };
     const options = { upsert: true };
-    User.findOneAndUpdate(query, update, options)
+    await User.findOneAndUpdate(query, update, options);
     socket.on("send-message", async(data) => {
-        socket.emit("sent-successful", { username: data.to.username })
-        addChatToContact(data.sender,data.to.username,{...data,status:"sent"})
-        addChatToContact(data.to.username,data.sender,{...data,status:"sent"})
-        const userId = users.get(data.to.username)
+        socket.emit("sent-successful", { username: data.to.username });
+        addChatToContact(data.sender,data.to.username,{...data,status:"sent"});
+        addChatToContact(data.to.username,data.sender,{...data,status:"sent"});
+        const userId = users.get(data.to.username);
         setTimeout(() => {
-            socket.to(userId).emit("receive-message", data)
+            socket.to(userId).emit("receive-message", data);
         }, 100);
     })
 
     socket.on("read-message", (data) => {
-        const sender = users.get(data.to)
-        socket.to(sender).emit("read", { username: data.from })
+        const sender = users.get(data.to);
+        socket.to(sender).emit("read", { username: data.from });
     })
 
-    socket.on("disconnect", () => {
-        const date = new Date()
-        const time = `${date.getHours()}:${date.getMinutes()}`
+    socket.on("disconnect", async() => {
+        const date = new Date();
+        const time = `${date.toLocaleDateString()} , ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
         const query = { username: username }
         const update = { $set: { "lastSeen": time} };
         const options = { upsert: true };
-        User.findOneAndUpdate(query, update, options)
+        await User.findOneAndUpdate(query, update, options).catch(err=>{
+            console.log(err)
+        })
     })
 
 })

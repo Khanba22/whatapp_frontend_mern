@@ -3,9 +3,20 @@ const express = require("express")
 
 const router = express.Router()
 
-router.post("/",async(req,res)=>{
+router.post("/login",async(req,res)=>{
     const user = req.body
-    await User.findOne({username:user.username}).then(user=>{
+    await User.findOne({email:user.email,password:user.password}).then(user=>{
+        res.json(user)
+    }).catch(err=>{
+        res.status(300).json({
+            message:"User Not Found"
+        })
+    })
+})
+
+router.post("/auth",async(req,res)=>{
+    const user = req.body
+    await User.findOne({email:user.email}).then(user=>{
         res.json(user)
     }).catch(err=>{
         res.status(300).json({

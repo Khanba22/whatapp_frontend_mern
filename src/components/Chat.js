@@ -1,18 +1,27 @@
-import React from 'react'
 import styles from "../stylesheets/Chat.module.css"
-// import { editReply } from '../redux/replyReducer'
 import { useSelector } from 'react-redux'
 import blueTick from "../assets/blueTick.png"
 // import double from "../assets/icons8-double-tick-30.png"
 import single from "../assets/icons8-double-tick-30.png"
 import clock from "../assets/clock.png"
 
+const ReactionArray = (props) => {
+
+    const reactionOBJ = props.reactionOBJ
+    return (
+        <p>{reactionOBJ !== undefined && Object.keys(reactionOBJ).map(key=>{
+            return reactionOBJ[key]
+        })}</p>
+    )
+}
+
 function Chat(props) {
     const user = useSelector(state => state.user)
     const data = props.data
     const reply = data.reply
-    const reactions = data.reactions
     const src = data.status === "sent" ? single : data.status === "read" ? blueTick : clock;
+
+    const reactionArr = data.reactions ? Object.keys(data.reactions):[]
 
     const leftChatStyles = data.reply && {
         borderLeft: `5px solid ${data.reply.color}`,
@@ -25,7 +34,7 @@ function Chat(props) {
 
     return (
         <>
-            <div style={{ zIndex: '3' }} onContextMenu={(e) => { props.renderOptionTab(e, data) }} className={data.sender !== user.username ? styles.leftChat : styles.rightChat}>
+            <div style={ reactionArr.length === 0 ? { zIndex: '3' } : { zIndex: '3' ,marginBottom:"20px"}} onContextMenu={(e) => { props.renderOptionTab(e, data) }} className={data.sender !== user.username ? styles.leftChat : styles.rightChat}>
                 {/* Put The conditions for grp chat later Idiot :D */}
                 {reply !== undefined && <>
                     <div style={data.sender !== user.username ? leftChatStyles : rightChatStyles} className={styles.replyHolder}>
@@ -37,20 +46,17 @@ function Chat(props) {
                 {false ? <h4 style={{ color: data.color }} >{data.sender !== user.username ? data.sender : ""}</h4> : <></>}
                 <p  >{data.message}</p>
                 <div className={styles.foot} >
-                    <span  >{data.time}</span>
-                    <span className={styles.statusIcon} >
+                    <span>{data.time.split(",")[1] !== undefined ? data.time.split(",")[1] : data.time}</span>
+                    {data.sender === user.username ? <span className={styles.statusIcon} >
                         <img src={src} alt="" />
                     </span>
-                </div>
+                        : <></>}
 
+                </div>
+                {data.reactions&&<div className={styles.reaction} style={data.sender === user.username ? {} : {}}>
+                    <ReactionArray reactionOBJ={data.reactions} />
+                </div>}
             </div>
-            {/* <div className={styles.reaction}>
-                    {
-                        reactions && reactions.map(reaction=>{
-                            return <><p>s</p></>
-                        })
-                    }
-            </div> */}
         </>
     )
 }

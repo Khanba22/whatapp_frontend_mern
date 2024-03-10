@@ -5,6 +5,7 @@ const chatReducer = createSlice({
     initialState: {
         username: "",
         contactNo: "1658121206",
+        email:"",
         lastSeen: "3:13 PM",
         chats: [],
         profilePicture: "http://dummyimage.com/156x100.png/cc0000/ffffff"

@@ -5,6 +5,8 @@ const userReducers = createSlice({
         username: "",
         lastSeen:"",
         contacts: [],
+        email:"",
+        password:"",
         profilePicture:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReG1Q1niGCxmNCzqY0JntvFVoiA2JNRHiMhHB8dRrikQ&s",
         contactNo: ""
     },
@@ -13,7 +15,7 @@ const userReducers = createSlice({
             const name = action.payload.name
             return {
                 ...state,
-                [name]: action.payload.value
+                ...action.payload
             }
         },
         updateUserChats:(state,action)=>{

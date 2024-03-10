@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../stylesheets/Contact.module.css'
 import tick from "../assets/icons8-done-50.png"
+import blank from "../assets/blankProfile.webp"
 import doubleTick from "../assets/icons8-double-tick-30.png"
 import blueTick from "../assets/blueTick.png"
 import clock from "../assets/clock.png"
@@ -35,7 +36,7 @@ function Contact(props) {
 
     return (
         <div onClick={selectContact} className={styles.container} style={selected ? { backgroundColor: "var(--bgTertiary)" } : {}}>
-            <img className={styles.profileImage} src={data.profilePicture} alt="" />
+            <img className={styles.profileImage} src={data.profilePicture !== ""?data.profilePicture:blank} alt="" />
             <div className={styles.content}>
                 <div className={styles.nameLine}>
                     <h3>{data.username}</h3>

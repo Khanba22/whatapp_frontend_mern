@@ -18,17 +18,23 @@
 }
 
 .reaction{
-    background-color: black;
-    position: relative;
-    top: -15px;
+    gap: 5px;
+    padding: 1px 4px;
+    background-color: #202020;
+    border: 2px solid #312828;
+    position: absolute;
+    bottom: -15px;
     left: 20px;
     z-index: 3;
     display: flex;
     color: white;
     align-items: center;
-    max-width: 20%;
-    height: 25px;
-    margin-bottom: -15px;
+    /*height: 25px;*/
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
 }
 
 .leftChat , .rightChat{
@@ -54,6 +60,8 @@
     margin-left: auto;
     background-color: var(--chatBackground1);
 }
+
+
 
 
 .leftChat span,.rightChat span{
