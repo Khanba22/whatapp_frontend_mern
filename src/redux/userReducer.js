@@ -12,7 +12,6 @@ const userReducers = createSlice({
     },
     reducers: {
         changeDetails: (state, action) => {
-            const name = action.payload.name
             return {
                 ...state,
                 ...action.payload

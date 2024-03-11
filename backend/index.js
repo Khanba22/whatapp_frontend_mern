@@ -13,6 +13,8 @@ connectToMongo()
 // const {ExpressPeerServer} = require('peer')
 const fs = require('fs')
 
+
+
 // const servers = ExpressPeerServer()
 
 
@@ -54,6 +56,11 @@ io.on("connection", async(socket) => {
     socket.on("read-message", (data) => {
         const sender = users.get(data.to);
         socket.to(sender).emit("read", { username: data.from });
+    })
+
+    socket.on("send-reaction",(data)=>{
+        const userId = users.get(data.to)
+        socket.to(userId).emit("receive-reaction",data)
     })
 
     socket.on("disconnect", async() => {

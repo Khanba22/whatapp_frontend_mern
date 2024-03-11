@@ -4,12 +4,11 @@ import blueTick from "../assets/blueTick.png"
 // import double from "../assets/icons8-double-tick-30.png"
 import single from "../assets/icons8-double-tick-30.png"
 import clock from "../assets/clock.png"
-
 const ReactionArray = (props) => {
-
     const reactionOBJ = props.reactionOBJ
+
     return (
-        <p>{reactionOBJ !== undefined && Object.keys(reactionOBJ).map(key=>{
+        <p onClick={props.removeReaction}>{reactionOBJ !== undefined && Object.keys(reactionOBJ).map(key=>{
             return reactionOBJ[key]
         })}</p>
     )
@@ -31,7 +30,6 @@ function Chat(props) {
         borderLeft: `5px solid ${data.reply.color}`,
         backgroundColor: "var(--chatBackground1secondary)"
     }
-
     return (
         <>
             <div style={ reactionArr.length === 0 ? { zIndex: '3' } : { zIndex: '3' ,marginBottom:"20px"}} onContextMenu={(e) => { props.renderOptionTab(e, data) }} className={data.sender !== user.username ? styles.leftChat : styles.rightChat}>
@@ -54,7 +52,7 @@ function Chat(props) {
 
                 </div>
                 {data.reactions&&<div className={styles.reaction} style={data.sender === user.username ? {} : {}}>
-                    <ReactionArray reactionOBJ={data.reactions} />
+                    <ReactionArray removeReaction = {props.removeReaction}  reactionOBJ={data.reactions} />
                 </div>}
             </div>
         </>

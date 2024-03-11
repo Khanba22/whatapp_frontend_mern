@@ -12,55 +12,40 @@ import { editReply } from '../redux/replyReducer';
 import OptionTab from './OptionTab';
 import { updateUserChatStatus, updateUserChatStatusLast, updateUserChats } from '../redux/userReducer';
 import { updateChatStatus, updateChat, updateChatStatusLast } from '../redux/chatReducer';
+import { addReactionToUser, addReactionToChat, removeReactionFromChat, removeReactionFromUser } from '../functions/reactionHandlers';
 
 function Chatbox() {
 
-  const addReaction = (emoji,by) => {
+  const removeReaction = (e) => {
+    e.preventDefault();
     dispatch({
       type: `${updateUserChats}`,
       payload: {
-        contacts: addReactionToUser(reply,emoji,by)
+        contacts: removeReactionFromUser(reply, user.username, user.contacts)
       }
     })
     dispatch({
       type: `${updateChat}`,
       payload: {
-        chats: addReactionToChat(reply,emoji,by)
+        chats: removeReactionFromChat(reply, user.username, chatInfo.chats)
       }
     })
   }
 
-  const addReactionToChat = (chat,reaction , by)=>{
-    var tempChats = [...chatInfo.chats]
-    tempChats = tempChats.map(chatMap=>{
-      if (chat.message === chatMap.message && chat.time === chatMap.time ) {
-        return {...chatMap,reactions:{...chatMap.reactions,[by]:reaction}}
-      }else{
-        return chatMap
+  const addReaction = (emoji, by) => {
+    socket.emit("send-reaction", { ...reply, by, emoji, to: chatInfo.username })
+    dispatch({
+      type: `${updateUserChats}`,
+      payload: {
+        contacts: addReactionToUser(reply, emoji, by, user.contacts)
       }
     })
-    return tempChats
-  }
-
-  const addReactionToUser = (chat, emoji , by) => {
-    var contacts = user.contacts
-    var contact = {}
-    contact = contacts.find(contact => contact.username === chat.sender)
-    contacts = contacts.filter(contact => contact.username !== chat.sender)
-    if (contact) {
-      contact = {
-        ...contact,
-        chats: contact.chats.map(chatMap => {
-          if (chat.message === chatMap.message && chat.time === chatMap.time && chat.sender === chatMap.sender) {
-            return { ...chatMap, reactions: { ...chatMap.reactions, [by]: emoji } }
-          }
-          return chatMap
-        })
+    dispatch({
+      type: `${updateChat}`,
+      payload: {
+        chats: addReactionToChat(reply, emoji, by, chatInfo.chats)
       }
-      console.log(contact.chats)
-      contacts.unshift(contact)
-    }
-    return contacts
+    })
   }
 
 
@@ -185,6 +170,24 @@ function Chatbox() {
   }, [])
 
   // Handle Messaging Queries From Websockets
+
+  socket.on("receive-reaction", (data) => {
+    console.log(data)
+    const emoji = data.emoji
+    dispatch({
+      type: `${updateUserChats}`,
+      payload: {
+        contacts: addReactionToUser(data, emoji, data.by, user.contacts)
+      }
+    })
+    dispatch({
+      type: `${updateChat}`,
+      payload: {
+        chats: addReactionToChat(data, emoji, data.by, chatInfo.chats)
+      }
+    })
+  })
+
   socket.on("receive-message", (data) => {
     dispatch({
       type: `${updateUserChats}`,
@@ -287,7 +290,7 @@ function Chatbox() {
       color: "#68f3a7",
       message: message,
       time: time,
-      reactions:{}
+      reactions: {}
     }
     if (reply.show) {
       data = {
@@ -337,7 +340,7 @@ function Chatbox() {
         <div ref={chatRef} className={styles.chatHolder}>
           {
             showOptions ? <div className={styles.optionContainer} style={{ left: pos.x, top: pos.y }}>
-              <OptionTab addReaction = {addReaction} />
+              <OptionTab addReaction={addReaction} />
             </div> : <></>
           }
           {
@@ -348,14 +351,14 @@ function Chatbox() {
                     <h1>
                       Hello
                     </h1>
-                    <Chat renderOptionTab={renderOptionTab} data={chat} />
+                    <Chat removeReaction={removeReaction} renderOptionTab={renderOptionTab} data={chat} />
 
                   </>
                 } else {
-                  return <Chat renderOptionTab={renderOptionTab} data={chat} />
+                  return <Chat removeReaction={removeReaction} renderOptionTab={renderOptionTab} data={chat} />
                 }
               } else {
-                return <Chat renderOptionTab={renderOptionTab} data={chat} />
+                return <Chat removeReaction={removeReaction} renderOptionTab={renderOptionTab} data={chat} />
               }
             })
           }
