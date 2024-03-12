@@ -47,10 +47,8 @@ function LoginForm() {
       },
       body: JSON.stringify({ email: details.email, password: details.password })
     }).then(async res => {
-      console.log(res.status)
       return res.json()
     }).then(data => {
-      console.log(data)
       if (data) {
         dispatch({
           type: `${changeDetails}`,

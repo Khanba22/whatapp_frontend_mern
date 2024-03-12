@@ -28,7 +28,7 @@ const showReply = () => {
 }
 
 const emojiCLick = (e, emojiObject) => {
-  console.log(e.emoji)
+  // console.log(e.emoji)
 }
 
 const showEmojiPicker = () => {

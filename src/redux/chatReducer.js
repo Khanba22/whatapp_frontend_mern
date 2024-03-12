@@ -14,8 +14,7 @@ const chatReducer = createSlice({
         updateChat:(state,action)=>{
             return {
                 ...state,
-                ...action.payload,
-                chats:action.payload.chats
+                ...action.payload
             }
         },
         updateChatStatus:(state,action)=>{

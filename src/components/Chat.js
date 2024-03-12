@@ -21,6 +21,7 @@ function Chat(props) {
     const src = data.status === "sent" ? single : data.status === "read" ? blueTick : clock;
 
     const reactionArr = data.reactions ? Object.keys(data.reactions):[]
+    const nullKeyCount = reactionArr.filter(key=>data.reactions[key] !== null).length
 
     const leftChatStyles = data.reply && {
         borderLeft: `5px solid ${data.reply.color}`,
@@ -32,7 +33,7 @@ function Chat(props) {
     }
     return (
         <>
-            <div style={ reactionArr.length === 0 ? { zIndex: '3' } : { zIndex: '3' ,marginBottom:"20px"}} onContextMenu={(e) => { props.renderOptionTab(e, data) }} className={data.sender !== user.username ? styles.leftChat : styles.rightChat}>
+            <div style={ nullKeyCount === 0 ? { zIndex: '3' } : { zIndex: '3' ,marginBottom:"20px"}} onContextMenu={(e) => { props.renderOptionTab(e, data) }} className={data.sender !== user.username ? styles.leftChat : styles.rightChat}>
                 {/* Put The conditions for grp chat later Idiot :D */}
                 {reply !== undefined && <>
                     <div style={data.sender !== user.username ? leftChatStyles : rightChatStyles} className={styles.replyHolder}>
@@ -51,7 +52,7 @@ function Chat(props) {
                         : <></>}
 
                 </div>
-                {data.reactions&&<div className={styles.reaction} style={data.sender === user.username ? {} : {}}>
+                {nullKeyCount!== 0 && data.reactions&&<div className={styles.reaction} style={data.sender === user.username ? {} : {}}>
                     <ReactionArray removeReaction = {props.removeReaction}  reactionOBJ={data.reactions} />
                 </div>}
             </div>

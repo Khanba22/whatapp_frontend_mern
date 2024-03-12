@@ -54,7 +54,7 @@ const removeReactionFromChat = (chat, by, chatInfoState)=>{
     var tempChats = [...chatInfoState]
     tempChats = tempChats.map(chatMap => {
         if (chat.message === chatMap.message && chat.time === chatMap.time) {
-            const newReact = delete chatMap.reactions[by]
+            const newReact = {...chatMap.reactions,[by]:null}
             return { ...chatMap, reactions: newReact }
         } else {
             return chatMap

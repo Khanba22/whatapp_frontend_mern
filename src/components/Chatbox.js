@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
-import styles from "../stylesheets/Chatbox.module.css"
+import React, { useEffect, useRef, useState } from 'react';
+import styles from "../stylesheets/Chatbox.module.css";
 import EmojiPicker from 'emoji-picker-react';
-import send from "../assets/send.png"
+import send from "../assets/send.png";
 import blank from "../assets/blankProfile.webp"
-import close from "../assets/close.png"
+import close from "../assets/close.png";
 import arrowDown from "../assets/arrowDoubleDown.png"
 import io from 'socket.io-client';
 import Chat from './Chat';
@@ -15,89 +15,11 @@ import { updateChatStatus, updateChat, updateChatStatusLast } from '../redux/cha
 import { addReactionToUser, addReactionToChat, removeReactionFromChat, removeReactionFromUser } from '../functions/reactionHandlers';
 
 function Chatbox() {
-
-  const removeReaction = (e) => {
-    e.preventDefault();
-    dispatch({
-      type: `${updateUserChats}`,
-      payload: {
-        contacts: removeReactionFromUser(reply, user.username, user.contacts)
-      }
-    })
-    dispatch({
-      type: `${updateChat}`,
-      payload: {
-        chats: removeReactionFromChat(reply, user.username, chatInfo.chats)
-      }
-    })
-  }
-
-  const addReaction = (emoji, by) => {
-    socket.emit("send-reaction", { ...reply, by, emoji, to: chatInfo.username })
-    dispatch({
-      type: `${updateUserChats}`,
-      payload: {
-        contacts: addReactionToUser(reply, emoji, by, user.contacts)
-      }
-    })
-    dispatch({
-      type: `${updateChat}`,
-      payload: {
-        chats: addReactionToChat(reply, emoji, by, chatInfo.chats)
-      }
-    })
-  }
-
-
-  const addChatToContact = (chat) => {
-    var updatedChats = [...chatInfo.chats]
-    updatedChats.push(chat)
-    return updatedChats
-  }
-
-  const addChatToUser = (chat, bool) => {
-    var contacts = user.contacts
-    var contact = {}
-    if (!bool) {
-      console.log("Sender = " + chat.sender)
-      contact = contacts.find(contact => contact.username === chat.sender)
-      contacts = contacts.filter(contact => contact.username !== chat.sender)
-    } else {
-      console.log(chat.to.username)
-      contact = contacts.find(contact => contact.username === chat.to.username)
-      contacts = contacts.filter(contact => contact.username !== chat.to.username)
-    }
-
-    if (contact) {
-      contact = {
-        ...contact,
-        chats: [...contact.chats, chat]
-      }
-      contacts.unshift(contact)
-    } else {
-      contact = {
-        username: chat.sender,
-        contactNo: chat.contactNo,
-        lastSeen: chat.lastSeen,
-        chats: [
-          {
-            status: "read",
-            sender: chat.username,
-            contactNo: chat.contactNo,
-            color: "#68f3a7",
-            message: chat.message,
-            time: chat.time
-          }
-        ],
-        profilePicture: chat.profilePicture
-      }
-      contacts.unshift(contact)
-    }
-    return contacts
-  }
-
   const dispatch = useDispatch()
   const [showEmoji, setShowEmoji] = useState(false)
+  var chatInfo = useSelector(state => state.chatDetails)
+  var reply = useSelector(state => state.reply)
+  var user = useSelector(state => state.user)
   const renderOptionTab = (e, data) => {
     e.preventDefault()
     const heightBox = 350 // The height of Context Menu
@@ -133,13 +55,92 @@ function Chatbox() {
   const inputRef = useRef(null);
   const chatRef = useRef(null)
 
+  const removeReaction = (e) => {
+    e.preventDefault();
+    socket.emit("remove-reaction-req",{...reply,by:user.username,to:chatInfo.username})
+    dispatch({
+      type: `${updateUserChats}`,
+      payload: {
+        contacts: removeReactionFromUser(reply, user.username, user.contacts)
+      }
+    });
+    dispatch({
+      type: `${updateChat}`,
+      payload: {
+        chats: removeReactionFromChat(reply, user.username, chatInfo.chats)
+      }
+    });
+  }
+
+  const addReaction = (emoji, by) => {
+    socket.emit("send-reaction", { ...reply, by, emoji, to: chatInfo.username })
+    dispatch({
+      type: `${updateUserChats}`,
+      payload: {
+        contacts: addReactionToUser(reply, emoji, by, user.contacts)
+      }
+    });
+    dispatch({
+      type: `${updateChat}`,
+      payload: {
+        chats: addReactionToChat(reply, emoji, by, chatInfo.chats)
+      }
+    });
+  }
+
+
+  const addChatToContact = (chat) => {
+    var updatedChats = [...chatInfo.chats];
+    updatedChats.push(chat);
+    return updatedChats
+  }
+
+  const addChatToUser = (chat, bool) => {
+    var contacts = user.contacts
+    var contact = {}
+    if (!bool) {
+      contact = contacts.find(contact => contact.username === chat.sender)
+      contacts = contacts.filter(contact => contact.username !== chat.sender)
+    } else {
+      contact = contacts.find(contact => contact.username === chat.to.username)
+      contacts = contacts.filter(contact => contact.username !== chat.to.username)
+    }
+
+    if (contact) {
+      contact = {
+        ...contact,
+        chats: [...contact.chats, chat]
+      }
+      contacts.unshift(contact)
+    } else {
+      contact = {
+        username: chat.sender,
+        contactNo: chat.contactNo,
+        lastSeen: chat.lastSeen,
+        chats: [
+          {
+            status: "read",
+            sender: chat.username,
+            contactNo: chat.contactNo,
+            color: "#68f3a7",
+            message: chat.message,
+            time: chat.time
+          }
+        ],
+        profilePicture: chat.profilePicture
+      }
+      contacts.unshift(contact)
+    }
+    return contacts
+  }
+
+
+
 
   const onEmojiClick = (e, emojiObject) => {
     setMessage(message + e.emoji)
   }
-  var chatInfo = useSelector(state => state.chatDetails)
-  var reply = useSelector(state => state.reply)
-  var user = useSelector(state => state.user)
+
 
   const socket = io("http://localhost:4000", {
     query: {
@@ -147,8 +148,40 @@ function Chatbox() {
     },
   });
 
+  const fetchStatus = async()=>{
+    await fetch('http://localhost:4000/fetchUser/fetchStatus', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username:chatInfo.username })
+    }).then(async res => {
+      return res.json()
+    }).then(data => {
+      if (data) {
+        console.log(data)
+        dispatch({
+          type: `${updateChat}`,
+          payload: {
+            lastSeen:data.lastSeen
+          }
+        })
+        dispatch({
+          type: `${updateUserChats}`,
+          payload: {
+            lastSeen:data.lastSeen
+          }
+        })
+      }
+    }).catch(err=>{
+      console.log(err)
+    })
+  }
+
+
   useEffect(() => {
     if (chatInfo.name !== "") {
+      fetchStatus()
       setTimeout(() => {
         socket.emit('read-message', { to: chatInfo.username, from: user.username })
         document.getElementById('lowest').scrollIntoView({
@@ -171,8 +204,22 @@ function Chatbox() {
 
   // Handle Messaging Queries From Websockets
 
+  socket.on('remove-reaction',(data)=>{
+    dispatch({
+      type: `${updateUserChats}`,
+      payload: {
+        contacts: removeReactionFromUser(data,data.by,user.contacts)
+      }
+    })
+    dispatch({
+      type: `${updateChat}`,
+      payload: {
+        chats: removeReactionFromChat(data,data.by,chatInfo.chats)
+      }
+    })
+  })
+
   socket.on("receive-reaction", (data) => {
-    console.log(data)
     const emoji = data.emoji
     dispatch({
       type: `${updateUserChats}`,
@@ -334,7 +381,7 @@ function Chatbox() {
           <img src={chatInfo.profilePicture !== "" ? chatInfo.profilePicture : blank} alt="" className={styles.profilePicture} />
           <div className={styles.chatInfoTabRight}>
             <h2 className={styles.chatName}>{chatInfo.username}</h2>
-            <p>last seen {chatInfo.lastSeen}</p>
+            <p>{chatInfo.lastSeen ? chatInfo.lastSeen !== "online"?chatInfo.lastSeen.split(",")[1]!== undefined?`Last Seen ${chatInfo.lastSeen.split(",")[1]}`:"":"Online":""}</p>
           </div>
         </div>
         <div ref={chatRef} className={styles.chatHolder}>

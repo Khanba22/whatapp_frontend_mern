@@ -18,10 +18,9 @@ const userReducers = createSlice({
             }
         },
         updateUserChats:(state,action)=>{
-            const contacts = action.payload.contacts
             return {
                 ...state,
-                contacts:contacts
+                ...action.payload
             }
         },
         updateUserChatStatus : (state,action)=>{
@@ -71,7 +70,6 @@ const userReducers = createSlice({
             return {
                 ...state,
                 contacts: state.contacts.map(contact => {
-                    console.log(contact.username,contactName)
                     if (contact.username === contactName) {
                         return {
                             ...contact,

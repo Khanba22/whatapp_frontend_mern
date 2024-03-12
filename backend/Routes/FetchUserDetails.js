@@ -14,6 +14,17 @@ router.post("/login",async(req,res)=>{
     })
 })
 
+router.post("/fetchStatus",async(req,res)=>{
+    const user = await User.findOne({username:req.body.username}).catch((err)=>{
+        res.json({err:err})
+    })
+    if (user) {
+        res.json({lastSeen:user.lastSeen})
+    }else{
+        res.json({err:"not found"})
+    }
+})
+
 router.post("/auth",async(req,res)=>{
     const user = req.body
     await User.findOne({email:user.email}).then(user=>{

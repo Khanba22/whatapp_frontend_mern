@@ -54,13 +54,30 @@ io.on("connection", async(socket) => {
     })
 
     socket.on("read-message", (data) => {
+
         const sender = users.get(data.to);
         socket.to(sender).emit("read", { username: data.from });
     })
 
-    socket.on("send-reaction",(data)=>{
+    socket.on("send-reaction",async(data)=>{
+        console.log(data)
+        User.findByIdAndUpdate({"username":data.to,"contacts.username":data.by,"contacts.chats.message":data.message,"contacts.chats.time":data.time},
+            {
+                $set:{
+                    "contacts.chats.reactions":{
+                        ..."contacts.chats.reactions",
+                        [data.by]:data.emoji
+                    }
+                }
+            }
+        )
         const userId = users.get(data.to)
         socket.to(userId).emit("receive-reaction",data)
+    })
+
+    socket.on("remove-reaction-req",data=>{
+        const userId = users.get(data.to)
+        socket.to(userId).emit('remove-reaction',data)
     })
 
     socket.on("disconnect", async() => {

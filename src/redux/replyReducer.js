@@ -8,7 +8,8 @@ const replyReducer = createSlice({
         color: "",
         message: "",
         time: "",
-        show:false
+        show:false,
+        reactions:{}
     },
     reducers: {
         editReply: (state, action) => {
@@ -19,7 +20,8 @@ const replyReducer = createSlice({
                 color:data.color,
                 message:data.message,
                 time:data.time,
-                show:data.show
+                show:data.show,
+                reactions:data.reactions
             }
         }
     }
