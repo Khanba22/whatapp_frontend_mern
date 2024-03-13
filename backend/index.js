@@ -11,7 +11,8 @@ const User = require("./Models/UserSchema")
 const addChatToContact = require("./functions/AddMessageQuery")
 connectToMongo()
 // const {ExpressPeerServer} = require('peer')
-const fs = require('fs')
+const fs = require('fs');
+const { updateUserChatStatus } = require("./functions/updateStatusQuery");
 
 
 
@@ -32,6 +33,7 @@ const users = new Map()
 //Routes
 app.use("/fetchUser",require("./Routes/FetchUserDetails"))
 app.use("/createAccount",require("./Routes/createAccount"))
+app.use("/addContact",require("./Routes/addContact"))
 
 
 //Socket IO 
@@ -53,8 +55,9 @@ io.on("connection", async(socket) => {
         }, 100);
     })
 
-    socket.on("read-message", (data) => {
-
+    socket.on("read-message", async(data) => {
+        await updateUserChatStatus(data.to,data.from,"read")
+        await updateUserChatStatus(data.from,data.to,"read")
         const sender = users.get(data.to);
         socket.to(sender).emit("read", { username: data.from });
     })

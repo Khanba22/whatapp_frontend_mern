@@ -1,22 +1,10 @@
-import React, { useEffect } from 'react'
-import { changeDetails } from '../redux/userReducer'
+import React from 'react'
 import styles from "../stylesheets/ContactList.module.css"
 import Contact from './Contact'
-import { useDispatch, useSelector } from 'react-redux'
+import {  useSelector } from 'react-redux'
 function ContactList() {
 
-  const dispatch = useDispatch()
-
   const details = useSelector((state) => state.user)
-
-  const updateUsername = (e) => {
-    dispatch({
-      type: `${changeDetails}`,
-      payload: {
-        username: e.target.value
-      }
-    })
-  }
 
   return (
     <div className={styles.container}>
@@ -26,7 +14,7 @@ function ContactList() {
           <img src="" alt="" />
           <img src="" alt="" />
         </div>
-        <input onChange={updateUsername} type="text" placeholder='Search For messages and Chats' className={styles.searchBar} />
+        <input type="text" placeholder='Search For messages and Chats' className={styles.searchBar} />
       </div>
       <div className={styles.holder}>
         {

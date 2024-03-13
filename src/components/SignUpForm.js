@@ -11,6 +11,24 @@ function SignUpForm() {
     const user = useSelector(state => state.user)
     const dispatch = useDispatch()
 
+    const createAccount = async()=>{
+        await fetch('http://localhost:4000/createAccount', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({...user,contacts:[],lastSeen:"online",profilePicture:""})
+          }).then(async res => {
+            if (res.status === 200) {
+                alert("Account Created Successfully")
+            }else{
+                alert("Account Creation Failed")
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+    }
+
     const handleChange = (e)=>{
         dispatch({
             type:`${changeDetails}`,
@@ -37,7 +55,7 @@ function SignUpForm() {
                 <div className={styles.inputGroup}>
                     <input onChange={handleChange} value={user.contactNo} type="number" id="contactNo" name="contactNo" placeholder="Contact Number" />
                 </div>
-                <button type="submit"  >Signup</button>
+                <button type="submit" onClick={createAccount} >Signup</button>
                 <div className={styles.bottomtext}>
                     <p>Already have an account? <a href="/">Login</a></p>
                 </div>

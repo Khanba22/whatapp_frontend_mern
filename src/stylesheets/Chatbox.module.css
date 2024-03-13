@@ -68,6 +68,26 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.dateHeader{
+    margin: 5px;
+    justify-content: center;
+    display: flex;
+    padding: 4px;
+}
+
+.dateHeader p{
+    font-size: 90%;
+    border: 1px solid #272727f6;
+    border-radius: 10px;
+    background-color: #272727;
+    padding: 4px;
+    color: aliceblue;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
 .chatInfoTabRight {
     color: rgb(211, 225, 225);
     display: flex;

@@ -5,6 +5,36 @@
     padding: 20px;
 }
 
+.optionContainer p span{
+    font-size: 100%;
+}
+
+.optionContainer p{
+    font-weight: 500;
+    font-family: 'Courier New', Courier, monospace;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+}
+
+.optionContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    /* height: 100px; */
+    width: 180px;
+    background-color: #272727f6;
+    backdrop-filter: blur(12px);
+    position: absolute;
+    z-index: 10;
+    padding: 5px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
 .container{
     display: flex;
     flex-direction: column;
@@ -38,16 +68,18 @@
 }
 
 .leftChat , .rightChat{
-    color: var(--chatColor);
+    
     margin: 5px;
     display: flex;
     flex-direction: column;
+    width: min-content;
     width: clamp(300px,50%,1400px);
     padding: 4px 10px;
     position: relative;
 }
 
 .leftChat{
+    color: var(--chatColor2);
     border-radius: 10px 10px 10px 0px;
     background-color: var(--chatBackground2);
     -webkit-border-radius: 10px 10px 10px 0px;
@@ -56,12 +88,20 @@
     -o-border-radius: 10px 10px 10px 0px;
 }
 .rightChat{
+    color: var(--chatColor1);
     border-radius: 10px 10px 0px 10px;
     margin-left: auto;
     background-color: var(--chatBackground1);
 }
 
-
+.highlighted{
+    scale:1.1;
+    transition: 1.5s;
+    -webkit-transition: 1.5s;
+    -moz-transition: 1.5s;
+    -ms-transition: 1.5s;
+    -o-transition: 1.5s;
+}
 
 
 .leftChat span,.rightChat span{
@@ -72,7 +112,7 @@
 
 .leftChat p{
     font-size: 100%;
-    padding: 2px;
+    padding: 3px 5px;
 }
 
 .replyHolder{
@@ -104,14 +144,16 @@
 
 
 .statusIcon{
-    height: 12px;
-    width: 12px;
+    height: 16px;
+    width: 16px;
 }
 
 .statusIcon img{
+    filter: drop-shadow(2px black);
     height: 100%;
     width: 100%;
     object-fit: contain;
+    -webkit-filter: drop-shadow(2px black);
 }
 
 .foot{

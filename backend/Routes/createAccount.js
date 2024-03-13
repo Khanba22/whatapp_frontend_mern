@@ -5,10 +5,11 @@ const router = express.Router()
 router.post("/",(req,res)=>{
     User.create(req.body).then((id)=>[
         res.json({
-            "message":"Creation Successful"
+            "message":"Creation Successful",
+            id:id
         })
     ]).catch(err=>{
-        res.json(err)
+        res.status(300).json(err)
     })
 })
 

@@ -2,7 +2,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Kanit;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 200;
     scroll-behavior: smooth;
 }
 
@@ -11,10 +12,11 @@
     --bgTertiary: rgb(52 52 52);
     --bgPrimary: rgb(32 32 32);
     --bgSecondary: rgb(44 44 44);
-    --chatColor: #c7dbd7;
+    --chatColor2: #c7dbd7;
     --chatTertiary: #a3a3a3;
     --chatBackground1: rgb(0 92 75);
-    --chatBackground1secondary: rgb(27 107 93);
+    --chatColor1:#c7dbd7;
+    --chatBackground1secondary: rgb(26 106 92);
     --chatBackground2: rgb(54 54 54);
     --chatBackground2secondary: rgb(74 74 74);
 }

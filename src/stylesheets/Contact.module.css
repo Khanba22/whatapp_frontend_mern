@@ -24,7 +24,7 @@
 .content{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     width: 80%;
-    color: var(--chatColor);
+    color: var(--chatColor2);
     display: flex;
     flex-direction: column;
     height: 90%;

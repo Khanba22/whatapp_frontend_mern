@@ -13,6 +13,7 @@ import OptionTab from './OptionTab';
 import { updateUserChatStatus, updateUserChatStatusLast, updateUserChats } from '../redux/userReducer';
 import { updateChatStatus, updateChat, updateChatStatusLast } from '../redux/chatReducer';
 import { addReactionToUser, addReactionToChat, removeReactionFromChat, removeReactionFromUser } from '../functions/reactionHandlers';
+import { addChatToContact, addChatToUser } from '../functions/chatFunctions';
 
 function Chatbox() {
   const dispatch = useDispatch()
@@ -57,7 +58,7 @@ function Chatbox() {
 
   const removeReaction = (e) => {
     e.preventDefault();
-    socket.emit("remove-reaction-req",{...reply,by:user.username,to:chatInfo.username})
+    socket.emit("remove-reaction-req", { ...reply, by: user.username, to: chatInfo.username })
     dispatch({
       type: `${updateUserChats}`,
       payload: {
@@ -89,51 +90,6 @@ function Chatbox() {
   }
 
 
-  const addChatToContact = (chat) => {
-    var updatedChats = [...chatInfo.chats];
-    updatedChats.push(chat);
-    return updatedChats
-  }
-
-  const addChatToUser = (chat, bool) => {
-    var contacts = user.contacts
-    var contact = {}
-    if (!bool) {
-      contact = contacts.find(contact => contact.username === chat.sender)
-      contacts = contacts.filter(contact => contact.username !== chat.sender)
-    } else {
-      contact = contacts.find(contact => contact.username === chat.to.username)
-      contacts = contacts.filter(contact => contact.username !== chat.to.username)
-    }
-
-    if (contact) {
-      contact = {
-        ...contact,
-        chats: [...contact.chats, chat]
-      }
-      contacts.unshift(contact)
-    } else {
-      contact = {
-        username: chat.sender,
-        contactNo: chat.contactNo,
-        lastSeen: chat.lastSeen,
-        chats: [
-          {
-            status: "read",
-            sender: chat.username,
-            contactNo: chat.contactNo,
-            color: "#68f3a7",
-            message: chat.message,
-            time: chat.time
-          }
-        ],
-        profilePicture: chat.profilePicture
-      }
-      contacts.unshift(contact)
-    }
-    return contacts
-  }
-
 
 
 
@@ -148,13 +104,13 @@ function Chatbox() {
     },
   });
 
-  const fetchStatus = async()=>{
+  const fetchStatus = async () => {
     await fetch('http://localhost:4000/fetchUser/fetchStatus', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username:chatInfo.username })
+      body: JSON.stringify({ username: chatInfo.username })
     }).then(async res => {
       return res.json()
     }).then(data => {
@@ -163,17 +119,17 @@ function Chatbox() {
         dispatch({
           type: `${updateChat}`,
           payload: {
-            lastSeen:data.lastSeen
+            lastSeen: data.lastSeen
           }
         })
         dispatch({
           type: `${updateUserChats}`,
           payload: {
-            lastSeen:data.lastSeen
+            lastSeen: data.lastSeen
           }
         })
       }
-    }).catch(err=>{
+    }).catch(err => {
       console.log(err)
     })
   }
@@ -204,17 +160,17 @@ function Chatbox() {
 
   // Handle Messaging Queries From Websockets
 
-  socket.on('remove-reaction',(data)=>{
+  socket.on('remove-reaction', (data) => {
     dispatch({
       type: `${updateUserChats}`,
       payload: {
-        contacts: removeReactionFromUser(data,data.by,user.contacts)
+        contacts: removeReactionFromUser(data, data.by, user.contacts)
       }
     })
     dispatch({
       type: `${updateChat}`,
       payload: {
-        chats: removeReactionFromChat(data,data.by,chatInfo.chats)
+        chats: removeReactionFromChat(data, data.by, chatInfo.chats)
       }
     })
   })
@@ -239,14 +195,14 @@ function Chatbox() {
     dispatch({
       type: `${updateUserChats}`,
       payload: {
-        contacts: addChatToUser(data, false)
+        contacts: addChatToUser(data, false, user.contacts)
       }
     })
     if (data.sender === chatInfo.username) {
       dispatch({
         type: `${updateChat}`,
         payload: {
-          chats: addChatToContact(data)
+          chats: addChatToContact(data, chatInfo.chats)
         }
       })
       dispatch({
@@ -355,13 +311,13 @@ function Chatbox() {
     dispatch({
       type: `${updateUserChats}`,
       payload: {
-        contacts: addChatToUser(data, true)
+        contacts: addChatToUser(data, true, user.contacts)
       }
     })
     dispatch({
       type: `${updateChat}`,
       payload: {
-        chats: addChatToContact(data)
+        chats: addChatToContact(data, chatInfo.chats)
       }
     })
     cancelReply()
@@ -381,7 +337,7 @@ function Chatbox() {
           <img src={chatInfo.profilePicture !== "" ? chatInfo.profilePicture : blank} alt="" className={styles.profilePicture} />
           <div className={styles.chatInfoTabRight}>
             <h2 className={styles.chatName}>{chatInfo.username}</h2>
-            <p>{chatInfo.lastSeen ? chatInfo.lastSeen !== "online"?chatInfo.lastSeen.split(",")[1]!== undefined?`Last Seen ${chatInfo.lastSeen.split(",")[1]}`:"":"Online":""}</p>
+            <p>{chatInfo.lastSeen ? chatInfo.lastSeen !== "online" ? chatInfo.lastSeen.split(",")[1] !== undefined ? `Last Seen ${chatInfo.lastSeen.split(",")[1]}` : "" : "Online" : ""}</p>
           </div>
         </div>
         <div ref={chatRef} className={styles.chatHolder}>
@@ -393,11 +349,12 @@ function Chatbox() {
           {
             chatInfo.chats.map((chat, index) => {
               if (chat.time) {
-                if (chat.time === chatInfo.chats[index - 1]) {
+                console.log(chatInfo.chats[index].time.split(",")[0])
+                if (index > 0 && chatInfo.chats[index].time.split(",")[0] !== chatInfo.chats[index - 1].time.split(",")[0]) {
                   return <>
-                    <h1>
-                      Hello
-                    </h1>
+                    <div className={styles.dateHeader}>
+                      <p>{ chatInfo.chats[index].time.split(",")[0]}</p>
+                    </div>
                     <Chat removeReaction={removeReaction} renderOptionTab={renderOptionTab} data={chat} />
 
                   </>
