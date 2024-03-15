@@ -78,7 +78,8 @@ function LoginForm() {
   }
 
   return (
-    <div className={styles.loginContainer}>
+    <div className={styles.container}>
+      <div className={styles.loginContainer}>
       <form className={styles.loginForm}>
         <h1>Welcome Back</h1>
         <p>Please login to your account</p>
@@ -107,6 +108,7 @@ function LoginForm() {
           />
         </div>
       </form>
+    </div>
     </div>
   )
 }

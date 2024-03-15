@@ -23,7 +23,7 @@ router.post("/",(req,res)=>{
             },
         },
       ])
-      User.findByIdAndUpdate({username:body.from},{
+      User.findOneAndUpdate({username:body.from},{
         $push:{
             contacts:user
         }

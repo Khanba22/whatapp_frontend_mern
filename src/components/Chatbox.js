@@ -331,7 +331,7 @@ function Chatbox() {
   return (
     <>
       <div className={styles.container} onClick={() => {
-        setShowOptions(false)
+        setShowOptions(false)  
       }} >
         <div className={styles.chatInfoTab}>
           <img src={chatInfo.profilePicture !== "" ? chatInfo.profilePicture : blank} alt="" className={styles.profilePicture} />
@@ -343,7 +343,7 @@ function Chatbox() {
         <div ref={chatRef} className={styles.chatHolder}>
           {
             showOptions ? <div className={styles.optionContainer} style={{ left: pos.x, top: pos.y }}>
-              <OptionTab addReaction={addReaction} />
+              <OptionTab setShowOptions = {setShowOptions} addReaction={addReaction} />
             </div> : <></>
           }
           {

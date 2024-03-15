@@ -10,13 +10,12 @@ const bodyParser = require('body-parser')
 const User = require("./Models/UserSchema")
 const addChatToContact = require("./functions/AddMessageQuery")
 connectToMongo()
-// const {ExpressPeerServer} = require('peer')
-const fs = require('fs');
+const {ExpressPeerServer} = require('peer')
 const { updateUserChatStatus } = require("./functions/updateStatusQuery");
 
 
 
-// const servers = ExpressPeerServer()
+const servers = ExpressPeerServer()
 
 
 
@@ -63,8 +62,7 @@ io.on("connection", async(socket) => {
     })
 
     socket.on("send-reaction",async(data)=>{
-        console.log(data)
-        User.findByIdAndUpdate({"username":data.to,"contacts.username":data.by,"contacts.chats.message":data.message,"contacts.chats.time":data.time},
+        User.findOneAndUpdate({"username":data.to,"contacts.username":data.by,"contacts.chats.message":data.message,"contacts.chats.time":data.time},
             {
                 $set:{
                     "contacts.chats.reactions":{
@@ -90,7 +88,7 @@ io.on("connection", async(socket) => {
         const update = { $set: { "lastSeen": time} };
         const options = { upsert: true };
         await User.findOneAndUpdate(query, update, options).catch(err=>{
-            console.log(err)
+            console.log("Cannot Update Status")
         })
     })
 

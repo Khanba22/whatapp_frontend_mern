@@ -7,7 +7,7 @@ import clock from "../assets/clock.png"
 import { useState } from "react"
 const ReactionArray = (props) => {
     const reactionOBJ = props.reactionOBJ
-    const [showOptions, setShowOptions] = useState(true)
+    const [showOptions, setShowOptions] = useState(false)
     const [pos,setPos] = useState({x:40,y:0})
     const renderOptionTab = (e, data) => {
         e.preventDefault()
@@ -72,7 +72,7 @@ function Chat(props) {
     }
     return (
         <>
-            <div style={nullKeyCount === 0 ? { zIndex: '3' } : { zIndex: '3', marginBottom: "20px" }} onContextMenu={(e) => { props.renderOptionTab(e, data) }} className={`${data.sender !== user.username ? styles.leftChat : styles.rightChat} countClass`}>
+            <div style={nullKeyCount === 0 ? { zIndex: '3' } : { zIndex: '3', marginBottom: "20px" }} onTouchStart={e=>props.renderOptionTab(e,data)} onContextMenu={(e) => { props.renderOptionTab(e, data) }} className={`${data.sender !== user.username ? styles.leftChat : styles.rightChat} countClass`}>
                 {/* Put The conditions for grp chat later Idiot :D */}
                 {reply !== undefined && <>
                     <div onClick={() => { scrollReplyIntoView(reply) }} style={data.sender !== user.username ? leftChatStyles : rightChatStyles} className={styles.replyHolder}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../stylesheets/Contact.module.css'
-import tick from "../assets/icons8-done-50.png"
+// import tick from "../assets/icons8-done-50.png"
 import blank from "../assets/blankProfile.webp"
 import doubleTick from "../assets/icons8-double-tick-30.png"
 import blueTick from "../assets/blueTick.png"

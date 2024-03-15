@@ -39,7 +39,8 @@ function SignUpForm() {
     }
 
     return (
-        <div className={styles.loginContainer}>
+        <div className={styles.container}>
+            <div className={styles.loginContainer}>
             <form className={styles.loginForm}>
                 <h1>Welcome Back</h1>
                 <p>Enter Your Account Details</p>
@@ -69,6 +70,7 @@ function SignUpForm() {
                     }}
                 />
             </form>
+        </div>
         </div>
     )
 }
