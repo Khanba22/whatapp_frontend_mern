@@ -191,11 +191,15 @@
 }
 
 .sendButton{
+    position: relative;
+    transform: translateY(-10px);
+    rotate: -45deg;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
     outline: none;
+    filter: invert();
     border: none;
     padding: 5px 5px 0px 0px;
     -webkit-border-radius: 50%;
@@ -203,6 +207,11 @@
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
     background-color: transparent;
+    -webkit-filter: invert();
+    -webkit-transform: translateY(-10px);
+    -moz-transform: translateY(-10px);
+    -ms-transform: translateY(-10px);
+    -o-transform: translateY(-10px);
 }
 
 .inputForm button img{

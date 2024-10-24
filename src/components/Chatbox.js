@@ -388,7 +388,6 @@ function Chatbox() {
             {showEmoji ? <EmojiPicker emojiStyle='facebook' style={{ zIndex: "10" }} onEmojiClick={onEmojiClick} /> : <></>}
           </div>
           <button className={styles.inputBarButtons} onClick={() => { setShowEmoji(!showEmoji) }}><img src="https://cdn-icons-png.flaticon.com/128/569/569501.png" alt="" /></button>
-          <button className={styles.inputBarButtons}></button>
           <form className={styles.inputForm}>
             <input id='writingSection' type="text" ref={inputRef} value={message} onChange={handleChange} />
             <button className={styles.sendButton} onClick={sendMessage}><img src={send} alt="" /></button>
